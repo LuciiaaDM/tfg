@@ -1,0 +1,38 @@
+import 'package:flutter/material.dart';
+import '../models/post_model.dart';
+
+class PostCard extends StatelessWidget {
+  final Post post;
+
+  PostCard({required this.post});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+      child: Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              post.title,
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 5.0),
+            Text('Location: ${post.location}'),
+            Text('Category: ${_capitalize(post.category)}'),
+            Text('Type: ${_capitalize(post.type)}'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _capitalize(String value) {
+    return value[0].toUpperCase() + value.substring(1);
+  }
+}

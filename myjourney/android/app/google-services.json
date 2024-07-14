@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "374641794443",
+    "project_id": "myjourney-6a6f6",
+    "storage_bucket": "myjourney-6a6f6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:374641794443:android:e5a6592536a67e086c238e",
+        "android_client_info": {
+          "package_name": "com.example.myjourney"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAimpY-sMmfAK3jc18fDDEYy_49i1fdGCA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
