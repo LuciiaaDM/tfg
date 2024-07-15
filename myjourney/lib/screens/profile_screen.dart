@@ -17,6 +17,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
 
   late TabController _tabController;
   String userName = '';
+  double balance = 0.0;
 
   @override
   void initState() {
@@ -33,6 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
       if (data != null) {
         setState(() {
           userName = data['username'] ?? 'User';
+          balance = (data['balance'] as num).toDouble(); // Asegúrate de convertir el balance a double
         });
       }
     }
@@ -66,12 +68,24 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
           Container(
             padding: EdgeInsets.all(20.0),
             alignment: Alignment.center,
-            child: Text(
-              userName,
-              style: TextStyle(
-                fontSize: 28.0,
-                fontWeight: FontWeight.bold,
-              ),
+            child: Column(
+              children: [
+                Text(
+                  userName,
+                  style: TextStyle(
+                    fontSize: 28.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 10.0), // Espacio entre el nombre y el saldo
+                Text(
+                  'Balance:${balance.toStringAsFixed(2)}€',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.green,
+                  ),
+                ),
+              ],
             ),
           ),
           TabBar(

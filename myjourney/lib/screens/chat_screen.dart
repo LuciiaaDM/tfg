@@ -61,7 +61,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
                       child: Container(
                         decoration: BoxDecoration(
-                          color: isMe ? Colors.blue[200] : Colors.grey[200],
+                          color: isMe ? Colors.orange : Colors.grey[200],
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),

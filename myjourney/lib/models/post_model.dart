@@ -10,6 +10,7 @@ class Post {
   double? price;
   String? meetingPoint;
   int? capacity;
+  int? availableSeats; // Nuevo campo para plazas disponibles
   String category;
   String? time;
 
@@ -24,6 +25,7 @@ class Post {
     required this.price,
     required this.meetingPoint,
     required this.capacity,
+    required this.availableSeats, // Inicializa plazas disponibles
     required this.category,
     this.time,
   }) : type = 'activity';
@@ -51,6 +53,7 @@ class Post {
       'price': price,
       'meetingPoint': meetingPoint,
       'capacity': capacity,
+      'availableSeats': availableSeats, // Agrega plazas disponibles al JSON
       'category': category,
       'time': time,
     };
@@ -69,6 +72,7 @@ class Post {
             price: json['price'],
             meetingPoint: json['meetingPoint'],
             capacity: json['capacity'],
+            availableSeats: json['availableSeats'], // Lee plazas disponibles del JSON
             category: json['category'],
             time: json['time'],
           )

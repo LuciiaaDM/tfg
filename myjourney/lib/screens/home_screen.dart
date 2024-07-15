@@ -132,7 +132,7 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
             posts = posts.where((post) => post.type == _filters['type'].toLowerCase()).toList();
           }
           if (_filters['category'] != 'Any') {
-            posts = posts.where((post) => post.category == _filters['category'].toLowerCase()).toList();
+            posts = posts.where((post) => post.category.toLowerCase() == _filters['category'].toLowerCase()).toList();
           }
           if (_filters['minPrice'] != null) {
             posts = posts.where((post) => post.price != null && post.price! >= _filters['minPrice']).toList();

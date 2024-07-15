@@ -9,12 +9,28 @@ class IncidencesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = _auth.currentUser;
+
+    if (currentUser == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Incidences'),
+        ),
+        body: Center(
+          child: Text('Please log in to view your incidences.'),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Incidences'),
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: _firestore.collection('incidences').snapshots(),
+        stream: _firestore
+            .collection('incidences')
+            .where('reportedBy', isEqualTo: currentUser.email)
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(
@@ -48,7 +64,7 @@ class IncidencesScreen extends StatelessWidget {
                     Text('Timestamp: ${incidence.timestamp.toDate()}'),
                   ],
                 ),
-                trailing: _auth.currentUser!.email == 'admin@example.com'
+                trailing: currentUser.email == 'admin@example.com'
                     ? DropdownButton<String>(
                         value: incidence.status,
                         items: <String>['Created', 'In Progress', 'Resolved'].map((String value) {

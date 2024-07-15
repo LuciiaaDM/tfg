@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'create_incidence_screen.dart';
 import 'incidences_screen.dart';
 import 'profile_edit_screen.dart';
+import 'add_balance_screen.dart'; // Importa la pantalla de añadir saldo
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -27,7 +28,10 @@ class SettingsScreen extends StatelessWidget {
             leading: Icon(Icons.account_balance_wallet),
             title: Text('Add Balance'),
             onTap: () {
-              // Navegar a la pantalla de añadir saldo
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddBalanceScreen()),
+              );
             },
           ),
           ListTile(

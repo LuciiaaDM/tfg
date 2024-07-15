@@ -5,6 +5,7 @@ class UserModel {
   String residence;
   String phoneNumber;
   String? additionalInfo;
+  double? balance;
 
   UserModel({
     required this.uid,
@@ -13,6 +14,7 @@ class UserModel {
     required this.residence,
     required this.phoneNumber,
     this.additionalInfo,
+    this.balance,
   });
 
   // Convert a UserModel object into a map
@@ -24,6 +26,7 @@ class UserModel {
       'residence': residence,
       'phoneNumber': phoneNumber,
       'additionalInfo': additionalInfo,
+      'balance': balance,
     };
   }
 
@@ -36,6 +39,7 @@ class UserModel {
       residence: json['residence'],
       phoneNumber: json['phoneNumber'],
       additionalInfo: json['additionalInfo'],
+      balance: json['balance'],
     );
   }
 }

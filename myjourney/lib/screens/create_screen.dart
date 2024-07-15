@@ -229,6 +229,7 @@ class _CreateScreenState extends State<CreateScreen> {
                           capacity: capacity!,
                           time: _timeController.text,
                           category: _selectedCategory,
+                          availableSeats: capacity!,
                         );
 
                         await _firestore.collection('posts').doc(postId).set(activity.toJson());
@@ -259,6 +260,10 @@ class _CreateScreenState extends State<CreateScreen> {
                     }
                   }
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange, // Cambia el color del botón a naranja
+                  foregroundColor: Colors.white, // Cambia el color del texto del botón a blanco
+                ),
                 child: Text('Create'),
               ),
             ],

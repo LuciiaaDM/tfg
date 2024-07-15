@@ -110,6 +110,10 @@ class _CreateIncidenceScreenState extends State<CreateIncidenceScreen> {
                     }
                   }
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange, // Cambia el color del botón a naranja
+                  foregroundColor: Colors.white, // Cambia el color del texto del botón a blanco
+                ),
                 child: Text('Create Incidence'),
               ),
             ],

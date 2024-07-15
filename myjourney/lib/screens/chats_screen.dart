@@ -50,19 +50,34 @@ class ChatsScreen extends StatelessWidget {
 
                   final recipientName = snapshot.data!['username'];
 
-                  return ListTile(
-                    title: Text(recipientName),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ChatScreen(
-                            chatId: chat.id,
-                            recipientName: recipientName,
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: Card(
+                      color: Colors.orange[100],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: ListTile(
+                        title: Text(
+                          recipientName,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      );
-                    },
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChatScreen(
+                                chatId: chat.id,
+                                recipientName: recipientName,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                   );
                 },
               );

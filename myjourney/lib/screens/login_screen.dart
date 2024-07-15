@@ -97,12 +97,19 @@ class _LoginScreenState extends State<LoginScreen> {
                     }
                   }
                 },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange, // Cambia el color del botón a naranja
+                  foregroundColor: Colors.white, // Cambia el color del texto del botón a blanco
+                ),
                 child: Text('Login'),
               ),
               TextButton(
                 onPressed: () {
                   Navigator.pushNamed(context, '/register');
                 },
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.orange, // Cambia el color del texto del botón a blanco
+                ),
                 child: Text('Don\'t have an account? Register here'),
               ),
             ],

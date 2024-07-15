@@ -45,7 +45,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 'restaurant',
                 'viewpoint',
                 'museum',
-                'historic_place'
+                'historic_site'
               ].map((String value) {
                 return DropdownMenuItem<String>(
                   value: value,

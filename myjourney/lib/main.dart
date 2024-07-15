@@ -17,6 +17,9 @@ import 'screens/my_posts_screen.dart';
 import 'screens/my_reservations_screen.dart';
 import 'screens/saved_screen.dart';
 import 'screens/edit_review_screen.dart';
+import 'models/reservation_model.dart';
+import 'screens/reservation_detail_screen.dart';
+import 'screens/add_balance_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +33,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'My Journey',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.orange,
       ),
       initialRoute: '/login',
       routes: {
@@ -47,6 +50,7 @@ class MyApp extends StatelessWidget {
         '/myPosts': (context) => MyPostsScreen(),
         '/myReservations': (context) => MyReservationsScreen(),
         '/saved': (context) => SavedScreen(),
+        '/addBalance': (context) => AddBalanceScreen(),
         '/editReview': (context) => EditReviewScreen(post: ModalRoute.of(context)!.settings.arguments as Post),
       },
       onGenerateRoute: (settings) {
@@ -64,6 +68,13 @@ class MyApp extends StatelessWidget {
           return MaterialPageRoute(
             builder: (context) {
               return ChatScreen(chatId: chatId, recipientName: recipientName);
+            },
+          );
+        } else if (settings.name == '/reservationDetail') {
+          final reservation = settings.arguments as Reservation;
+          return MaterialPageRoute(
+            builder: (context) {
+              return ReservationDetailScreen(reservation: reservation);
             },
           );
         }
