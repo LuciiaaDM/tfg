@@ -1,7 +1,49 @@
 import 'package:flutter/material.dart';
-import 'settings_screen.dart'; // Importa la pantalla de ajustes
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'settings_screen.dart';
+import 'my_posts_screen.dart';
+import 'my_reservations_screen.dart';
+import 'saved_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderStateMixin {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  late TabController _tabController;
+  String userName = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      final doc = await _firestore.collection('users').doc(user.uid).get();
+      final data = doc.data();
+      if (data != null) {
+        setState(() {
+          userName = data['username'] ?? 'User';
+        });
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,8 +61,38 @@ class ProfileScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Text('Profile Screen'),
+      body: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(20.0),
+            alignment: Alignment.center,
+            child: Text(
+              userName,
+              style: TextStyle(
+                fontSize: 28.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          TabBar(
+            controller: _tabController,
+            tabs: [
+              Tab(icon: Icon(Icons.post_add)),
+              Tab(icon: Icon(Icons.bookmark)),
+              Tab(icon: Icon(Icons.folder)),
+            ],
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                MyPostsScreen(),
+                MyReservationsScreen(),
+                SavedScreen(),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

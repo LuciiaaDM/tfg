@@ -12,14 +12,25 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  String residence = '';
-  String phoneNumber = '';
-  String additionalInfo = '';
+  late TextEditingController _residenceController;
+  late TextEditingController _phoneNumberController;
+  late TextEditingController _additionalInfoController;
 
   @override
   void initState() {
     super.initState();
+    _residenceController = TextEditingController();
+    _phoneNumberController = TextEditingController();
+    _additionalInfoController = TextEditingController();
     _loadUserData();
+  }
+
+  @override
+  void dispose() {
+    _residenceController.dispose();
+    _phoneNumberController.dispose();
+    _additionalInfoController.dispose();
+    super.dispose();
   }
 
   Future<void> _loadUserData() async {
@@ -29,9 +40,9 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       final data = doc.data();
       if (data != null) {
         setState(() {
-          residence = data['residence'] ?? '';
-          phoneNumber = data['phoneNumber'] ?? '';
-          additionalInfo = data['additionalInfo'] ?? '';
+          _residenceController.text = data['residence'] ?? '';
+          _phoneNumberController.text = data['phoneNumber'] ?? '';
+          _additionalInfoController.text = data['additionalInfo'] ?? '';
         });
       }
     }
@@ -50,11 +61,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           child: ListView(
             children: <Widget>[
               TextFormField(
-                initialValue: residence,
+                controller: _residenceController,
                 decoration: InputDecoration(hintText: 'Place of Residence'),
-                onChanged: (value) {
-                  residence = value;
-                },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your place of residence';
@@ -63,11 +71,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 },
               ),
               TextFormField(
-                initialValue: phoneNumber,
+                controller: _phoneNumberController,
                 decoration: InputDecoration(hintText: 'Phone Number'),
-                onChanged: (value) {
-                  phoneNumber = value;
-                },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your phone number';
@@ -76,11 +81,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 },
               ),
               TextFormField(
-                initialValue: additionalInfo,
+                controller: _additionalInfoController,
                 decoration: InputDecoration(hintText: 'Additional Information'),
-                onChanged: (value) {
-                  additionalInfo = value;
-                },
               ),
               SizedBox(height: 20.0),
               ElevatedButton(
@@ -96,9 +98,9 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       }
 
                       await _firestore.collection('users').doc(user.uid).update({
-                        'residence': residence,
-                        'phoneNumber': phoneNumber,
-                        'additionalInfo': additionalInfo,
+                        'residence': _residenceController.text,
+                        'phoneNumber': _phoneNumberController.text,
+                        'additionalInfo': _additionalInfoController.text,
                       });
 
                       ScaffoldMessenger.of(context).showSnackBar(

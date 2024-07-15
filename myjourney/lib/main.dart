@@ -13,6 +13,10 @@ import 'models/post_model.dart';
 import 'screens/create_incidence_screen.dart'; 
 import 'screens/incidences_screen.dart';
 import 'screens/profile_edit_screen.dart';
+import 'screens/my_posts_screen.dart';
+import 'screens/my_reservations_screen.dart';
+import 'screens/saved_screen.dart';
+import 'screens/edit_review_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +35,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         '/login': (context) => LoginScreen(),
+        '/register': (context) => RegisterScreen(),
         '/home': (context) => HomeScreen(),
         '/create': (context) => CreateScreen(),
         '/profile': (context) => ProfileScreen(),
@@ -39,8 +44,11 @@ class MyApp extends StatelessWidget {
         '/createIncidence': (context) => CreateIncidenceScreen(), 
         '/incidences': (context) => IncidencesScreen(),
         '/editProfile': (context) => ProfileEditScreen(),
+        '/myPosts': (context) => MyPostsScreen(),
+        '/myReservations': (context) => MyReservationsScreen(),
+        '/saved': (context) => SavedScreen(),
+        '/editReview': (context) => EditReviewScreen(post: ModalRoute.of(context)!.settings.arguments as Post),
       },
-
       onGenerateRoute: (settings) {
         if (settings.name == '/postDetail') {
           final post = settings.arguments as Post;
