@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'create_incidence_screen.dart';
+import 'incidences_screen.dart';
+import 'profile_edit_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -14,7 +17,10 @@ class SettingsScreen extends StatelessWidget {
             leading: Icon(Icons.edit),
             title: Text('Edit Profile'),
             onTap: () {
-              // Navegar a la pantalla de editar perfil
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ProfileEditScreen()),
+              );
             },
           ),
           ListTile(
@@ -22,6 +28,26 @@ class SettingsScreen extends StatelessWidget {
             title: Text('Add Balance'),
             onTap: () {
               // Navegar a la pantalla de añadir saldo
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.report_problem),
+            title: Text('Create Incidence'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CreateIncidenceScreen()),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.list),
+            title: Text('View Incidences'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => IncidencesScreen()),
+              );
             },
           ),
           ListTile(

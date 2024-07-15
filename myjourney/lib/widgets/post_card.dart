@@ -26,6 +26,17 @@ class PostCard extends StatelessWidget {
             Text('Location: ${post.location}'),
             Text('Category: ${_capitalize(post.category)}'),
             Text('Type: ${_capitalize(post.type)}'),
+            Text('Created by: ${post.userName}'), // Mostrar el nombre del usuario
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  '/postDetail',
+                  arguments: post,
+                );
+              },
+              child: Text('View Details'),
+            ),
           ],
         ),
       ),

@@ -131,7 +131,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                         Navigator.pushNamedAndRemoveUntil(
                           context,
-                          '/login',
+                          '/',
                           (route) => false,
                         ); // Navega a la página de inicio de sesión y elimina todas las rutas anteriores
                       }

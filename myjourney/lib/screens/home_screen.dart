@@ -6,6 +6,8 @@ import '../widgets/bottom_navigation.dart';
 import 'create_screen.dart';
 import 'chats_screen.dart';
 import 'profile_screen.dart';
+import 'filters_screen.dart';
+import 'post_detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -13,7 +15,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   int _currentIndex = 0;
 
   final List<Widget> _children = [
@@ -32,9 +33,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Home Page'),
-      ),
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigation(
         currentIndex: _currentIndex,
@@ -44,37 +42,114 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class HomeScreenContent extends StatelessWidget {
+class HomeScreenContent extends StatefulWidget {
+  @override
+  _HomeScreenContentState createState() => _HomeScreenContentState();
+}
+
+class _HomeScreenContentState extends State<HomeScreenContent> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  String _searchQuery = '';
+  Map<String, dynamic> _filters = {
+    'type': 'Any',
+    'category': 'Any',
+    'minPrice': null,
+    'maxPrice': null,
+  };
+
+  void _updateSearchQuery(String newQuery) {
+    setState(() {
+      _searchQuery = newQuery;
+    });
+  }
+
+  void _updateFilters(Map<String, dynamic> filters) {
+    setState(() {
+      _filters = filters;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: _firestore.collection('posts').snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Center(
-            child: Text('Error: ${snapshot.error}'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Home Page'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.filter_list),
+            onPressed: () async {
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => FiltersScreen()),
+              );
+              if (result != null) {
+                _updateFilters(result);
+              }
+            },
+          ),
+        ],
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(50.0),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: 'Search by location...',
+                border: OutlineInputBorder(),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: EdgeInsets.all(8.0),
+                suffixIcon: Icon(Icons.search),
+              ),
+              onChanged: _updateSearchQuery,
+            ),
+          ),
+        ),
+      ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: _firestore.collection('posts').snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          var posts = snapshot.data!.docs.map((doc) {
+            return Post.fromJson(doc.data() as Map<String, dynamic>);
+          }).where((post) {
+            return post.location.toLowerCase().contains(_searchQuery.toLowerCase());
+          }).toList();
+
+          // Aplicar filtros adicionales
+          if (_filters['type'] != 'Any') {
+            posts = posts.where((post) => post.type == _filters['type'].toLowerCase()).toList();
+          }
+          if (_filters['category'] != 'Any') {
+            posts = posts.where((post) => post.category == _filters['category'].toLowerCase()).toList();
+          }
+          if (_filters['minPrice'] != null) {
+            posts = posts.where((post) => post.price != null && post.price! >= _filters['minPrice']).toList();
+          }
+          if (_filters['maxPrice'] != null) {
+            posts = posts.where((post) => post.price != null && post.price! <= _filters['maxPrice']).toList();
+          }
+
+          return ListView.builder(
+            itemCount: posts.length,
+            itemBuilder: (context, index) {
+              final post = posts[index];
+              return PostCard(post: post); // Usar el componente PostCard
+            },
           );
-        }
-
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-
-        final posts = snapshot.data!.docs.map((doc) {
-          return Post.fromJson(doc.data() as Map<String, dynamic>);
-        }).toList();
-
-        return ListView.builder(
-          itemCount: posts.length,
-          itemBuilder: (context, index) {
-            return PostCard(post: posts[index]);
-          },
-        );
-      },
+        },
+      ),
     );
   }
 }

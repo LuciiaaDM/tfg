@@ -6,7 +6,13 @@ import 'screens/home_screen.dart';
 import 'screens/create_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/settings_screen.dart';
-import 'screens/chats_screen.dart'; // Asegúrate de importar esta pantalla
+import 'screens/chats_screen.dart';
+import 'screens/chat_screen.dart';
+import 'screens/post_detail_screen.dart';
+import 'models/post_model.dart';
+import 'screens/create_incidence_screen.dart'; 
+import 'screens/incidences_screen.dart';
+import 'screens/profile_edit_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,15 +28,38 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/',
+      initialRoute: '/login',
       routes: {
-        '/': (context) => LoginScreen(),
-        '/register': (context) => RegisterScreen(),
+        '/login': (context) => LoginScreen(),
         '/home': (context) => HomeScreen(),
         '/create': (context) => CreateScreen(),
         '/profile': (context) => ProfileScreen(),
         '/settings': (context) => SettingsScreen(),
-        '/chats': (context) => ChatsScreen(), // Asegúrate de añadir esta ruta
+        '/chats': (context) => ChatsScreen(),
+        '/createIncidence': (context) => CreateIncidenceScreen(), 
+        '/incidences': (context) => IncidencesScreen(),
+        '/editProfile': (context) => ProfileEditScreen(),
+      },
+
+      onGenerateRoute: (settings) {
+        if (settings.name == '/postDetail') {
+          final post = settings.arguments as Post;
+          return MaterialPageRoute(
+            builder: (context) {
+              return PostDetailScreen(post: post);
+            },
+          );
+        } else if (settings.name == '/chat') {
+          final args = settings.arguments as Map<String, dynamic>;
+          final chatId = args['chatId'] as String;
+          final recipientName = args['recipientName'] as String;
+          return MaterialPageRoute(
+            builder: (context) {
+              return ChatScreen(chatId: chatId, recipientName: recipientName);
+            },
+          );
+        }
+        return null;
       },
     );
   }

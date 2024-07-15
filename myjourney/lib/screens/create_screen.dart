@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:intl/intl.dart';
 import '../models/post_model.dart';
 
 class CreateScreen extends StatefulWidget {
@@ -15,7 +14,7 @@ class _CreateScreenState extends State<CreateScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String _selectedType = 'Review'; // Por defecto seleccionamos review
-  String _selectedCategory = 'restaurant'; // Por defecto seleccionamos restaurant
+  String _selectedCategory = 'Restaurant'; // Por defecto seleccionamos restaurante
 
   // Campos comunes
   late String title;
@@ -27,9 +26,18 @@ class _CreateScreenState extends State<CreateScreen> {
   double? price;
   String? meetingPoint;
   int? capacity;
-  TimeOfDay? time; // Hora para actividades
+  final _timeController = TextEditingController();
 
-  final TextEditingController _timeController = TextEditingController();
+  @override
+  void dispose() {
+    _timeController.dispose();
+    super.dispose();
+  }
+
+  Future<String> _getUserName(String userId) async {
+    final userDoc = await _firestore.collection('users').doc(userId).get();
+    return userDoc['username'] ?? 'Unknown';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,15 +70,10 @@ class _CreateScreenState extends State<CreateScreen> {
               ),
               DropdownButtonFormField<String>(
                 value: _selectedCategory,
-                items: <String>[
-                  'restaurant',
-                  'viewpoint',
-                  'museum',
-                  'historic_place'
-                ].map((String value) {
+                items: <String>['Restaurant', 'Viewpoint', 'Museum', 'Historic Site'].map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
-                    child: Text(_capitalize(value)),
+                    child: Text(value),
                   );
                 }).toList(),
                 onChanged: (newValue) {
@@ -138,29 +141,6 @@ class _CreateScreenState extends State<CreateScreen> {
                   },
                 ),
                 TextFormField(
-                  controller: _timeController,
-                  decoration: InputDecoration(hintText: 'Time (HH:MM)'),
-                  readOnly: true,
-                  onTap: () async {
-                    TimeOfDay? picked = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.now(),
-                    );
-                    if (picked != null) {
-                      setState(() {
-                        time = picked;
-                        _timeController.text = picked.format(context);
-                      });
-                    }
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a time';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
                   decoration: InputDecoration(hintText: 'Price'),
                   keyboardType: TextInputType.number,
                   onChanged: (value) {
@@ -208,6 +188,16 @@ class _CreateScreenState extends State<CreateScreen> {
                     return null;
                   },
                 ),
+                TextFormField(
+                  decoration: InputDecoration(hintText: 'Time (HH:MM)'),
+                  controller: _timeController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a time';
+                    }
+                    return null;
+                  },
+                ),
               ],
               SizedBox(height: 20.0),
               ElevatedButton(
@@ -222,12 +212,17 @@ class _CreateScreenState extends State<CreateScreen> {
                         return;
                       }
 
+                      final postId = _firestore.collection('posts').doc().id;
+                      final userName = await _getUserName(user.uid); // Obtén el nombre de usuario
+
                       if (_selectedType == 'Activity') {
                         Post activity = Post.activity(
+                          id: postId,
                           title: title,
                           location: location,
                           description: description,
                           userId: user.uid,
+                          userName: userName, // Usa el nombre de usuario
                           date: date!,
                           price: price!,
                           meetingPoint: meetingPoint!,
@@ -236,17 +231,19 @@ class _CreateScreenState extends State<CreateScreen> {
                           category: _selectedCategory,
                         );
 
-                        await _firestore.collection('posts').add(activity.toJson());
+                        await _firestore.collection('posts').doc(postId).set(activity.toJson());
                       } else {
                         Post review = Post.review(
+                          id: postId,
                           title: title,
                           location: location,
                           description: description,
                           userId: user.uid,
+                          userName: userName, // Usa el nombre de usuario
                           category: _selectedCategory,
                         );
 
-                        await _firestore.collection('posts').add(review.toJson());
+                        await _firestore.collection('posts').doc(postId).set(review.toJson());
                       }
 
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -269,9 +266,5 @@ class _CreateScreenState extends State<CreateScreen> {
         ),
       ),
     );
-  }
-
-  String _capitalize(String value) {
-    return value[0].toUpperCase() + value.substring(1);
   }
 }
