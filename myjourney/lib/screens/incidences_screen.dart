@@ -14,17 +14,17 @@ class IncidencesScreen extends StatelessWidget {
     if (currentUser == null) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Incidences'),
+          title: Text('Incidencias'),
         ),
         body: Center(
-          child: Text('Please log in to view your incidences.'),
+          child: Text('Por favor, inicie sesión para ver sus incidencias.'),
         ),
       );
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Incidences'),
+        title: Text('Incidencias'),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore
@@ -57,17 +57,17 @@ class IncidencesScreen extends StatelessWidget {
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Category: ${incidence.category}'),
-                    Text('Reported by: ${incidence.reportedBy}'),
-                    Text('Status: ${incidence.status}'),
-                    if (incidence.userId != null) Text('User ID: ${incidence.userId}'),
-                    Text('Timestamp: ${incidence.timestamp.toDate()}'),
+                    Text('Categoría: ${incidence.category}'),
+                    Text('Reportado por: ${incidence.reportedBy}'),
+                    Text('Estado: ${incidence.status}'),
+                    if (incidence.userId != null) Text('ID de Usuario: ${incidence.userId}'),
+                    Text('Fecha y Hora: ${incidence.timestamp.toDate()}'),
                   ],
                 ),
-                trailing: currentUser.email == 'admin@example.com'
+                trailing: currentUser.email == 'admin@admin.com'
                     ? DropdownButton<String>(
                         value: incidence.status,
-                        items: <String>['Created', 'In Progress', 'Resolved'].map((String value) {
+                        items: <String>['Creado', 'En Proceso', 'Resuelto'].map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value),

@@ -73,7 +73,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                         .delete();
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Post deleted successfully!')),
+                      SnackBar(content: Text('¡Post eliminado exitosamente!')),
                     );
                   },
                 ),
@@ -86,21 +86,21 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              'Title: ${widget.post.title}',
+              'Título: ${widget.post.title}',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
-            Text('Location: ${widget.post.location}'),
-            Text('Category: ${widget.post.category}'),
-            Text('Type: ${widget.post.type}'),
-            Text('Created by: ${widget.post.userName}'),
+            Text('Ubicación: ${widget.post.location}'),
+            Text('Categoría: ${widget.post.category}'),
+            Text('Tipo: ${widget.post.type}'),
+            Text('Creado por: ${widget.post.userName}'),
             if (widget.post.type == 'activity') ...[
-              Text('Date: ${widget.post.date?.toLocal().toString().split(' ')[0]}'),
-              Text('Time: ${widget.post.time}'),
-              Text('Price: ${widget.post.price}€'),
-              Text('Meeting Point: ${widget.post.meetingPoint}'),
-              Text('Capacity: ${widget.post.capacity}'),
-              Text('Available Seats: ${widget.post.availableSeats}'), // Mostrar plazas disponibles
+              Text('Fecha: ${widget.post.date?.toLocal().toString().split(' ')[0]}'),
+              Text('Hora: ${widget.post.time}'),
+              Text('Precio: ${widget.post.price}€'),
+              Text('Punto de Encuentro: ${widget.post.meetingPoint}'),
+              Text('Capacidad: ${widget.post.capacity}'),
+              Text('Plazas Disponibles: ${widget.post.availableSeats}'), // Mostrar plazas disponibles
             ],
             SizedBox(height: 20),
             Text(widget.post.description),
@@ -120,26 +120,26 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                     ),
                   );
                 },
-                child: Text('Contact User'),
+                child: Text('Contactar Usuario'),
               ),
               ElevatedButton(
                 onPressed: () async {
                   if (isPostSaved) {
                     await _unsavePost(currentUser!.uid, widget.post.id);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Post removed from saved!')),
+                      SnackBar(content: Text('¡Post eliminado de guardados!')),
                     );
                   } else {
                     await _savePost(currentUser!.uid, widget.post.id);
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Post saved successfully!')),
+                      SnackBar(content: Text('¡Post guardado exitosamente!')),
                     );
                   }
                   setState(() {
                     isPostSaved = !isPostSaved;
                   });
                 },
-                child: Text(isPostSaved ? 'Unsave Post' : 'Save Post'),
+                child: Text(isPostSaved ? 'Olvidar Post' : 'Guardar Post'),
               ),
               if (widget.post.type == 'activity')
                 ElevatedButton(

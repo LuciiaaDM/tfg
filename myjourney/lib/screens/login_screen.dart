@@ -19,7 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: Text('Iniciar Sesión'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -29,26 +29,26 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextFormField(
-                decoration: InputDecoration(hintText: 'Username'),
+                decoration: InputDecoration(hintText: 'Nombre de Usuario'),
                 onChanged: (value) {
                   username = value;
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your username';
+                    return 'Por favor, ingrese su nombre de usuario';
                   }
                   return null;
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(hintText: 'Password'),
+                decoration: InputDecoration(hintText: 'Contraseña'),
                 obscureText: true,
                 onChanged: (value) {
                   password = value;
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
+                    return 'Por favor, ingrese su contraseña';
                   }
                   return null;
                 },
@@ -66,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       if (userSnapshot.docs.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('User not found')),
+                          SnackBar(content: Text('Usuario no encontrado')),
                         );
                         return;
                       }
@@ -81,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       );
 
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Login Successful!')),
+                        SnackBar(content: Text('¡Inicio de sesión exitoso!')),
                       );
 
                       Navigator.pushNamedAndRemoveUntil(
@@ -91,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ); // Navega a la página principal y elimina todas las rutas anteriores
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Failed to login: $e')),
+                        SnackBar(content: Text('Error al iniciar sesión: $e')),
                       );
                       print(e);
                     }
@@ -101,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   backgroundColor: Colors.orange, // Cambia el color del botón a naranja
                   foregroundColor: Colors.white, // Cambia el color del texto del botón a blanco
                 ),
-                child: Text('Login'),
+                child: Text('Iniciar Sesión'),
               ),
               TextButton(
                 onPressed: () {
@@ -110,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.orange, // Cambia el color del texto del botón a blanco
                 ),
-                child: Text('Don\'t have an account? Register here'),
+                child: Text('¿No tienes una cuenta? Regístrate aquí'),
               ),
             ],
           ),

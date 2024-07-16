@@ -14,6 +14,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   late String username;
   late String email;
   late String password;
+  late String confirmPassword;
   late String residence;
   late String phoneNumber;
   String? additionalInfo; // Hacemos que este campo sea opcional
@@ -24,7 +25,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Register'),
+        title: Text('Registro'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -33,56 +34,72 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             children: <Widget>[
               TextFormField(
-                decoration: InputDecoration(hintText: 'Username'),
+                decoration: InputDecoration(hintText: 'Nombre de usuario'),
                 onChanged: (value) {
                   username = value;
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your username';
+                    return 'Por favor, ingrese su nombre de usuario';
                   }
                   return null;
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(hintText: 'Email'),
+                decoration: InputDecoration(hintText: 'Correo electrónico'),
                 onChanged: (value) {
                   email = value;
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
+                    return 'Por favor, ingrese su correo electrónico';
                   }
                   return null;
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(hintText: 'Password'),
+                decoration: InputDecoration(hintText: 'Contraseña'),
                 obscureText: true,
                 onChanged: (value) {
                   password = value;
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
+                    return 'Por favor, ingrese su contraseña';
                   }
                   return null;
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(hintText: 'Place of Residence'),
+                decoration: InputDecoration(hintText: 'Confirmar contraseña'),
+                obscureText: true,
+                onChanged: (value) {
+                  confirmPassword = value;
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Por favor, confirme su contraseña';
+                  }
+                  if (value != password) {
+                    return 'Las contraseñas no coinciden';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                decoration: InputDecoration(hintText: 'Lugar de residencia'),
                 onChanged: (value) {
                   residence = value;
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(hintText: 'Phone Number'),
+                decoration: InputDecoration(hintText: 'Número de teléfono'),
                 onChanged: (value) {
                   phoneNumber = value;
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(hintText: 'Additional Information'),
+                decoration: InputDecoration(hintText: 'Información adicional'),
                 onChanged: (value) {
                   additionalInfo = value;
                 },
@@ -100,7 +117,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                       if (usernameSnapshot.docs.isNotEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Username already exists')),
+                          SnackBar(content: Text('El nombre de usuario ya existe')),
                         );
                         return;
                       }
@@ -126,7 +143,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             .set(userModel.toJson());
 
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('User Registered Successfully! Please login.'))
+                          SnackBar(content: Text('Usuario registrado con éxito. Por favor, inicie sesión.'))
                         );
 
                         Navigator.pushNamedAndRemoveUntil(
@@ -137,7 +154,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       }
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Failed to register user: $e')),
+                        SnackBar(content: Text('Error al registrar el usuario: $e')),
                       );
                       print(e);
                     }
@@ -147,7 +164,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   backgroundColor: Colors.orange, // Cambia el color del botón a naranja
                   foregroundColor: Colors.white, // Cambia el color del texto del botón a blanco
                 ),
-                child: Text('Register'),
+                child: Text('Registrar'),
               ),
             ],
           ),

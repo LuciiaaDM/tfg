@@ -44,7 +44,7 @@ class ChatsScreen extends StatelessWidget {
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return ListTile(
-                      title: Text('Loading...'),
+                      title: Text('Cargando...'),
                     );
                   }
 

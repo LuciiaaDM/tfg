@@ -16,11 +16,11 @@ class BottomNavigation extends StatelessWidget {
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
-          label: 'Home',
+          label: 'Inicio',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.add),
-          label: 'Create',
+          label: 'Crear',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.chat),
@@ -28,7 +28,7 @@ class BottomNavigation extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
-          label: 'Profile',
+          label: 'Perfil',
         ),
       ],
     );

@@ -15,17 +15,17 @@ class SavedScreen extends StatelessWidget {
     if (currentUser == null) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Saved Posts'),
+          title: Text('Publicaciones Guardadas'),
         ),
         body: Center(
-          child: Text('Please log in to view your saved posts.'),
+          child: Text('Por favor, inicia sesión para ver tus publicaciones guardadas.'),
         ),
       );
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Saved Posts'),
+        title: Text('Publicaciones Guardadas'),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore.collection('saved_posts')
@@ -50,7 +50,7 @@ class SavedScreen extends StatelessWidget {
 
           if (savedPosts.isEmpty) {
             return Center(
-              child: Text('No saved posts'),
+              child: Text('No hay publicaciones guardadas'),
             );
           }
 
@@ -90,7 +90,7 @@ class SavedScreen extends StatelessWidget {
                     onDismissed: (direction) async {
                       await _unsavePost(currentUser.uid, post.id);
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Post removed from saved!')),
+                        SnackBar(content: Text('Publicación eliminada de guardados!')),
                       );
                     },
                     child: Container(

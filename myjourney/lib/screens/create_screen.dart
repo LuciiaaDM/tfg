@@ -13,8 +13,8 @@ class _CreateScreenState extends State<CreateScreen> {
   final _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  String _selectedType = 'Review'; // Por defecto seleccionamos review
-  String _selectedCategory = 'Restaurant'; // Por defecto seleccionamos restaurante
+  String _selectedType = 'Reseña'; // Por defecto seleccionamos reseña
+  String _selectedCategory = 'Restaurante'; // Por defecto seleccionamos restaurante
 
   // Campos comunes
   late String title;
@@ -36,14 +36,14 @@ class _CreateScreenState extends State<CreateScreen> {
 
   Future<String> _getUserName(String userId) async {
     final userDoc = await _firestore.collection('users').doc(userId).get();
-    return userDoc['username'] ?? 'Unknown';
+    return userDoc['username'] ?? 'Desconocido';
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Activity or Review'),
+        title: Text('Crear Actividad o Reseña'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -53,7 +53,7 @@ class _CreateScreenState extends State<CreateScreen> {
             children: <Widget>[
               DropdownButtonFormField<String>(
                 value: _selectedType,
-                items: <String>['Review', 'Activity'].map((String value) {
+                items: <String>['Reseña', 'Actividad'].map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
@@ -65,12 +65,12 @@ class _CreateScreenState extends State<CreateScreen> {
                   });
                 },
                 decoration: InputDecoration(
-                  labelText: 'Select Type',
+                  labelText: 'Seleccionar Tipo',
                 ),
               ),
               DropdownButtonFormField<String>(
                 value: _selectedCategory,
-                items: <String>['Restaurant', 'Viewpoint', 'Museum', 'Historic Site'].map((String value) {
+                items: <String>['Restaurante', 'Mirador', 'Museo', 'Sitio Histórico'].map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
@@ -82,118 +82,118 @@ class _CreateScreenState extends State<CreateScreen> {
                   });
                 },
                 decoration: InputDecoration(
-                  labelText: 'Select Category',
+                  labelText: 'Seleccionar Categoría',
                 ),
               ),
               TextFormField(
-                decoration: InputDecoration(hintText: 'Title'),
+                decoration: InputDecoration(hintText: 'Título'),
                 onChanged: (value) {
                   title = value;
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a title';
+                    return 'Por favor, ingrese un título';
                   }
                   return null;
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(hintText: 'Location'),
+                decoration: InputDecoration(hintText: 'Ubicación'),
                 onChanged: (value) {
                   location = value;
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a location';
+                    return 'Por favor, ingrese una ubicación';
                   }
                   return null;
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(hintText: 'Description'),
+                decoration: InputDecoration(hintText: 'Descripción'),
                 onChanged: (value) {
                   description = value;
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a description';
+                    return 'Por favor, ingrese una descripción';
                   }
                   return null;
                 },
                 maxLines: 5, // Aumenta el tamaño del campo de descripción
               ),
-              if (_selectedType == 'Activity') ...[
+              if (_selectedType == 'Actividad') ...[
                 TextFormField(
-                  decoration: InputDecoration(hintText: 'Date (YYYY-MM-DD)'),
+                  decoration: InputDecoration(hintText: 'Fecha (YYYY-MM-DD)'),
                   onChanged: (value) {
                     date = DateTime.parse(value);
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a date';
+                      return 'Por favor, ingrese una fecha';
                     }
                     try {
                       DateTime.parse(value);
                     } catch (e) {
-                      return 'Please enter a valid date';
+                      return 'Por favor, ingrese una fecha válida';
                     }
                     return null;
                   },
                 ),
                 TextFormField(
-                  decoration: InputDecoration(hintText: 'Price'),
+                  decoration: InputDecoration(hintText: 'Precio'),
                   keyboardType: TextInputType.number,
                   onChanged: (value) {
                     price = double.parse(value);
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a price';
+                      return 'Por favor, ingrese un precio';
                     }
                     try {
                       double.parse(value);
                     } catch (e) {
-                      return 'Please enter a valid price';
+                      return 'Por favor, ingrese un precio válido';
                     }
                     return null;
                   },
                 ),
                 TextFormField(
-                  decoration: InputDecoration(hintText: 'Meeting Point'),
+                  decoration: InputDecoration(hintText: 'Punto de Encuentro'),
                   onChanged: (value) {
                     meetingPoint = value;
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a meeting point';
+                      return 'Por favor, ingrese un punto de encuentro';
                     }
                     return null;
                   },
                 ),
                 TextFormField(
-                  decoration: InputDecoration(hintText: 'Capacity'),
+                  decoration: InputDecoration(hintText: 'Capacidad'),
                   keyboardType: TextInputType.number,
                   onChanged: (value) {
                     capacity = int.parse(value);
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a capacity';
+                      return 'Por favor, ingrese una capacidad';
                     }
                     try {
                       int.parse(value);
                     } catch (e) {
-                      return 'Please enter a valid capacity';
+                      return 'Por favor, ingrese una capacidad válida';
                     }
                     return null;
                   },
                 ),
                 TextFormField(
-                  decoration: InputDecoration(hintText: 'Time (HH:MM)'),
+                  decoration: InputDecoration(hintText: 'Hora (HH:MM)'),
                   controller: _timeController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a time';
+                      return 'Por favor, ingrese una hora';
                     }
                     return null;
                   },
@@ -207,7 +207,7 @@ class _CreateScreenState extends State<CreateScreen> {
                       final user = _auth.currentUser;
                       if (user == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('No user is logged in')),
+                          SnackBar(content: Text('Ningún usuario ha iniciado sesión')),
                         );
                         return;
                       }
@@ -215,7 +215,7 @@ class _CreateScreenState extends State<CreateScreen> {
                       final postId = _firestore.collection('posts').doc().id;
                       final userName = await _getUserName(user.uid); // Obtén el nombre de usuario
 
-                      if (_selectedType == 'Activity') {
+                      if (_selectedType == 'Actividad') {
                         Post activity = Post.activity(
                           id: postId,
                           title: title,
@@ -248,13 +248,13 @@ class _CreateScreenState extends State<CreateScreen> {
                       }
 
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Creation Successful!'))
+                        SnackBar(content: Text('¡Creación Exitosa!'))
                       );
 
                       Navigator.pushReplacementNamed(context, '/home'); // Redirigir a la página de inicio después de crear
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Failed to create: $e')),
+                        SnackBar(content: Text('Error al crear: $e')),
                       );
                       print(e);
                     }
@@ -264,7 +264,7 @@ class _CreateScreenState extends State<CreateScreen> {
                   backgroundColor: Colors.orange, // Cambia el color del botón a naranja
                   foregroundColor: Colors.white, // Cambia el color del texto del botón a blanco
                 ),
-                child: Text('Create'),
+                child: Text('Crear'),
               ),
             ],
           ),

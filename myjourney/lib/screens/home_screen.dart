@@ -51,8 +51,8 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String _searchQuery = '';
   Map<String, dynamic> _filters = {
-    'type': 'Any',
-    'category': 'Any',
+    'type': 'Cualquiera',
+    'category': 'Cualquiera',
     'minPrice': null,
     'maxPrice': null,
   };
@@ -73,7 +73,7 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home Page'),
+        title: Text('Página Principal'),
         actions: [
           IconButton(
             icon: Icon(Icons.filter_list),
@@ -94,7 +94,7 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               decoration: InputDecoration(
-                hintText: 'Search by location...',
+                hintText: 'Buscar por ubicación...',
                 border: OutlineInputBorder(),
                 filled: true,
                 fillColor: Colors.white,
@@ -127,11 +127,11 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
             return post.location.toLowerCase().contains(_searchQuery.toLowerCase());
           }).toList();
 
-          // Aplicar filtros adicionales
-          if (_filters['type'] != 'Any') {
-            posts = posts.where((post) => post.type == _filters['type'].toLowerCase()).toList();
+          // filtros adicionales
+          if (_filters['type'] != 'Cualquiera') {
+            posts = posts.where((post) => post.type.toLowerCase() == _filters['type'].toLowerCase()).toList();
           }
-          if (_filters['category'] != 'Any') {
+          if (_filters['category'] != 'Cualquiera') {
             posts = posts.where((post) => post.category.toLowerCase() == _filters['category'].toLowerCase()).toList();
           }
           if (_filters['minPrice'] != null) {
@@ -145,7 +145,7 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
             itemCount: posts.length,
             itemBuilder: (context, index) {
               final post = posts[index];
-              return PostCard(post: post); // Usar el componente PostCard
+              return PostCard(post: post);
             },
           );
         },

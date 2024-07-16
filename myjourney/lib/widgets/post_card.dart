@@ -24,10 +24,11 @@ class PostCard extends StatelessWidget {
               ),
             ),
             SizedBox(height: 5.0),
-            Text('Location: ${post.location}'),
-            Text('Category: ${_capitalize(post.category)}'),
-            Text('Type: ${_capitalize(post.type)}'),
-            Text('Created by: ${post.userName}'),
+            Text('Ubicación: ${post.location}'),
+            Text('Categoría: ${_capitalize(post.category)}'),
+            Text('Tipo: ${_capitalize(post.type)}'),
+            Text('Creado por: ${post.userName}'),
+            SizedBox(height: 10.0),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(
@@ -40,7 +41,7 @@ class PostCard extends StatelessWidget {
                 backgroundColor: Colors.orange, // Cambia el color del botón a naranja
                 foregroundColor: Colors.white, // Cambia el color del texto del botón a blanco
               ),
-              child: Text('View Details'),
+              child: Text('Ver Detalles'),
             ),
           ],
         ),

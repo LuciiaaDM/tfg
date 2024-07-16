@@ -12,34 +12,34 @@ class ReservationDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Reservation Details'),
+        title: Text('Detalles de la Reserva'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Activity: ${reservation.activityTitle}'),
-            Text('Participants: ${reservation.numberOfParticipants}'),
-            Text('Total Price: \$${reservation.totalPrice.toStringAsFixed(2)}'),
-            Text('Status: ${reservation.status}'),
-            Text('Date: ${reservation.activityDate.toLocal().toString().split(' ')[0]}'),
-            Text('Time: ${reservation.activityTime}'),
+            Text('Actividad: ${reservation.activityTitle}'),
+            Text('Participantes: ${reservation.numberOfParticipants}'),
+            Text('Precio Total: ${reservation.totalPrice.toStringAsFixed(2)}€'),
+            Text('Estado: ${reservation.status}'),
+            Text('Fecha: ${reservation.activityDate.toLocal().toString().split(' ')[0]}'),
+            Text('Hora: ${reservation.activityTime}'),
             SizedBox(height: 20),
             if (reservation.status != 'cancelled')
               ElevatedButton.icon(
-                  onPressed: () async {
-                    bool confirm = await _showCancelConfirmationDialog(context);
-                    if (confirm) {
-                      await _cancelReservation(context);
-                    }
-                  },
-                  icon: Icon(Icons.delete),
-                  label: Text('Cancel Reservation'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                  ),
+                onPressed: () async {
+                  bool confirm = await _showCancelConfirmationDialog(context);
+                  if (confirm) {
+                    await _cancelReservation(context);
+                  }
+                },
+                icon: Icon(Icons.delete),
+                label: Text('Cancelar Reserva'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
                 ),
+              ),
           ],
         ),
       ),
@@ -51,8 +51,8 @@ class ReservationDetailScreen extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Confirm Cancellation'),
-          content: Text('Are you sure you want to cancel this reservation? You will be refunded the total price minus \$1.50 per participant.'),
+          title: Text('Confirmar Cancelación'),
+          content: Text('¿Estás seguro de que deseas cancelar esta reserva? Se te reembolsará el total menos 1.50€ por participante.'),
           actions: [
             TextButton(
               onPressed: () {
@@ -64,7 +64,7 @@ class ReservationDetailScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
-              child: Text('Yes'),
+              child: Text('Sí'),
             ),
           ],
         );
@@ -76,7 +76,7 @@ class ReservationDetailScreen extends StatelessWidget {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('No user is logged in')),
+        SnackBar(content: Text('No hay usuario conectado')),
       );
       return;
     }
@@ -104,7 +104,7 @@ class ReservationDetailScreen extends StatelessWidget {
         );
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Reservation cancelled and refunded!')),
+          SnackBar(content: Text('¡Reserva cancelada y reembolsada!')),
         );
 
         Navigator.pop(context);

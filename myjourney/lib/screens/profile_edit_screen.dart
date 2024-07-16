@@ -52,7 +52,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Profile'),
+        title: Text('Editar Perfil'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -62,27 +62,27 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
             children: <Widget>[
               TextFormField(
                 controller: _residenceController,
-                decoration: InputDecoration(hintText: 'Place of Residence'),
+                decoration: InputDecoration(hintText: 'Lugar de Residencia'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your place of residence';
+                    return 'Por favor, ingrese su lugar de residencia';
                   }
                   return null;
                 },
               ),
               TextFormField(
                 controller: _phoneNumberController,
-                decoration: InputDecoration(hintText: 'Phone Number'),
+                decoration: InputDecoration(hintText: 'Número de Teléfono'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your phone number';
+                    return 'Por favor, ingrese su número de teléfono';
                   }
                   return null;
                 },
               ),
               TextFormField(
                 controller: _additionalInfoController,
-                decoration: InputDecoration(hintText: 'Additional Information'),
+                decoration: InputDecoration(hintText: 'Información Adicional'),
               ),
               SizedBox(height: 20.0),
               ElevatedButton(
@@ -92,7 +92,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       final user = _auth.currentUser;
                       if (user == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('No user is logged in')),
+                          SnackBar(content: Text('Ningún usuario ha iniciado sesión')),
                         );
                         return;
                       }
@@ -104,19 +104,23 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       });
 
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Profile updated successfully!'))
+                        SnackBar(content: Text('¡Perfil actualizado exitosamente!'))
                       );
 
                       Navigator.pop(context); // Regresar a la pantalla anterior
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Failed to update profile: $e'))
+                        SnackBar(content: Text('Error al actualizar el perfil: $e'))
                       );
                       print(e);
                     }
                   }
                 },
-                child: Text('Save'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange, // Cambia el color del botón a naranja
+                  foregroundColor: Colors.white, // Cambia el color del texto del botón a blanco
+                ),
+                child: Text('Guardar'),
               ),
             ],
           ),

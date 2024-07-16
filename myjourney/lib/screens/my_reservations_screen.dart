@@ -15,17 +15,17 @@ class MyReservationsScreen extends StatelessWidget {
     if (currentUser == null) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('My Reservations'),
+          title: Text('Mis Reservas'),
         ),
         body: Center(
-          child: Text('Please log in to view your reservations.'),
+          child: Text('Por favor, inicie sesión para ver sus reservas.'),
         ),
       );
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Reservations'),
+        title: Text('Mis Reservas'),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore.collection('reservations')
@@ -55,7 +55,7 @@ class MyReservationsScreen extends StatelessWidget {
               return ListTile(
                 title: Text(reservation.activityTitle),
                 subtitle: Text(
-                  'Participants: ${reservation.numberOfParticipants}, Total Price: \$${reservation.totalPrice.toStringAsFixed(2)}',
+                  'Participantes: ${reservation.numberOfParticipants}, Precio Total: ${reservation.totalPrice.toStringAsFixed(2)}€',
                 ),
                 tileColor: reservation.status == 'cancelled' ? Colors.red.withOpacity(0.3) : null,
                 trailing: reservation.status == 'cancelled'

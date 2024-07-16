@@ -33,7 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
       final data = doc.data();
       if (data != null) {
         setState(() {
-          userName = data['username'] ?? 'User';
+          userName = data['username'] ?? 'Usuario';
           balance = (data['balance'] as num).toDouble(); // Asegúrate de convertir el balance a double
         });
       }
@@ -50,7 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: Text('Perfil'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.settings),
@@ -79,7 +79,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                 ),
                 SizedBox(height: 10.0), // Espacio entre el nombre y el saldo
                 Text(
-                  'Balance:${balance.toStringAsFixed(2)}€',
+                  'Saldo: ${balance.toStringAsFixed(2)}€',
                   style: TextStyle(
                     fontSize: 20.0,
                     color: Colors.green,
@@ -92,8 +92,8 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
             controller: _tabController,
             tabs: [
               Tab(icon: Icon(Icons.post_add)),
-              Tab(icon: Icon(Icons.bookmark)),
-              Tab(icon: Icon(Icons.folder)),
+              Tab(icon: Icon(Icons.book_online)),
+              Tab(icon: Icon(Icons.bookmarks)),
             ],
           ),
           Expanded(

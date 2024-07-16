@@ -23,7 +23,7 @@ class _AddBalanceScreenState extends State<AddBalanceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Balance'),
+        title: Text('Añadir Saldo'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -32,37 +32,37 @@ class _AddBalanceScreenState extends State<AddBalanceScreen> {
           child: ListView(
             children: <Widget>[
               TextFormField(
-                decoration: InputDecoration(hintText: 'Card Number'),
+                decoration: InputDecoration(hintText: 'Número de Tarjeta'),
                 onChanged: (value) {
                   cardNumber = value;
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your card number';
+                    return 'Por favor, introduce el número de tarjeta';
                   }
                   return null;
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(hintText: 'Card Holder Name'),
+                decoration: InputDecoration(hintText: 'Nombre del Titular de la Tarjeta'),
                 onChanged: (value) {
                   cardHolder = value;
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter the card holder name';
+                    return 'Por favor, introduce el nombre del titular de la tarjeta';
                   }
                   return null;
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(hintText: 'Expiry Date (MM/YY)'),
+                decoration: InputDecoration(hintText: 'Fecha de Caducidad (MM/AA)'),
                 onChanged: (value) {
                   expiryDate = value;
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter the expiry date';
+                    return 'Por favor, introduce la fecha de caducidad';
                   }
                   return null;
                 },
@@ -74,25 +74,25 @@ class _AddBalanceScreenState extends State<AddBalanceScreen> {
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter the CVV';
+                    return 'Por favor, introduce el CVV';
                   }
                   return null;
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(hintText: 'Amount to Add'),
+                decoration: InputDecoration(hintText: 'Cantidad a Añadir'),
                 keyboardType: TextInputType.number,
                 onChanged: (value) {
                   amountToAdd = double.parse(value);
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter an amount';
+                    return 'Por favor, introduce una cantidad';
                   }
                   try {
                     double.parse(value);
                   } catch (e) {
-                    return 'Please enter a valid amount';
+                    return 'Por favor, introduce una cantidad válida';
                   }
                   return null;
                 },
@@ -116,7 +116,7 @@ class _AddBalanceScreenState extends State<AddBalanceScreen> {
                             transaction.update(userRef, {'balance': newBalance});
 
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Balance added successfully!')),
+                              SnackBar(content: Text('¡Saldo añadido exitosamente!')),
                             );
 
                             Navigator.pop(context);
@@ -124,17 +124,17 @@ class _AddBalanceScreenState extends State<AddBalanceScreen> {
                         });
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Transaction failed. Please try again.')),
+                          SnackBar(content: Text('Transacción fallida. Por favor, intenta nuevamente.')),
                         );
                       }
                     }
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange, // Cambia el color del botón a naranja
-                  foregroundColor: Colors.white, // Cambia el color del texto del botón a blanco
+                  backgroundColor: Colors.orange,
+                  foregroundColor: Colors.white,
                 ),
-                child: Text('Add Balance'),
+                child: Text('Añadir Saldo'),
               ),
             ],
           ),

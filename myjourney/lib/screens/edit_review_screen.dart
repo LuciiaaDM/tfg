@@ -39,7 +39,7 @@ class _EditReviewScreenState extends State<EditReviewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Review'),
+        title: Text('Editar Reseña'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -49,31 +49,31 @@ class _EditReviewScreenState extends State<EditReviewScreen> {
             children: <Widget>[
               TextFormField(
                 controller: _titleController,
-                decoration: InputDecoration(hintText: 'Title'),
+                decoration: InputDecoration(hintText: 'Título'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a title';
+                    return 'Por favor, ingrese un título';
                   }
                   return null;
                 },
               ),
               TextFormField(
                 controller: _locationController,
-                decoration: InputDecoration(hintText: 'Location'),
+                decoration: InputDecoration(hintText: 'Ubicación'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a location';
+                    return 'Por favor, ingrese una ubicación';
                   }
                   return null;
                 },
               ),
               TextFormField(
                 controller: _descriptionController,
-                decoration: InputDecoration(hintText: 'Description'),
+                decoration: InputDecoration(hintText: 'Descripción'),
                 maxLines: 5,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a description';
+                    return 'Por favor, ingrese una descripción';
                   }
                   return null;
                 },
@@ -90,19 +90,23 @@ class _EditReviewScreenState extends State<EditReviewScreen> {
                       });
 
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Review updated successfully!'))
+                        SnackBar(content: Text('¡Reseña actualizada con éxito!'))
                       );
 
                       Navigator.pop(context); // Regresar a la pantalla anterior después de actualizar
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Failed to update review: $e'))
+                        SnackBar(content: Text('Error al actualizar la reseña: $e'))
                       );
                       print(e);
                     }
                   }
                 },
-                child: Text('Save'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange,
+                  foregroundColor: Colors.white,
+                ),
+                child: Text('Guardar'),
               ),
             ],
           ),

@@ -22,17 +22,17 @@ class _ReserveScreenState extends State<ReserveScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Reserve Activity'),
+        title: Text('Reservar Actividad'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text('Activity: ${widget.post.title}'),
-            Text('Available Seats: ${widget.post.availableSeats ?? 0}'),
+            Text('Actividad: ${widget.post.title}'),
+            Text('Plazas Disponibles: ${widget.post.availableSeats ?? 0}'),
             SizedBox(height: 20),
-            Text('Number of Participants:'),
+            Text('Número de Participantes:'),
             DropdownButton<int>(
               value: _numberOfParticipants,
               items: List.generate(widget.post.availableSeats ?? 0, (index) => index + 1)
@@ -48,13 +48,17 @@ class _ReserveScreenState extends State<ReserveScreen> {
               },
             ),
             SizedBox(height: 20),
-            Text('Total Price: \$${(widget.post.price! * _numberOfParticipants).toStringAsFixed(2)}'),
+            Text('Precio Total: ${(widget.post.price! * _numberOfParticipants).toStringAsFixed(2)}€'),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
                 await _makeReservation(context);
               },
-              child: Text('Reserve'),
+              child: Text('Reservar'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.orange, // Cambia el color del botón a naranja
+                foregroundColor: Colors.white, // Cambia el color del texto del botón a blanco
+              ),
             ),
           ],
         ),
@@ -66,7 +70,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
     final currentUser = _auth.currentUser;
     if (currentUser == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('No user is logged in')),
+        SnackBar(content: Text('No hay usuario conectado')),
       );
       return;
     }
@@ -79,7 +83,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
 
     if (userBalance < totalPrice) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Insufficient balance. Please recharge.')),
+        SnackBar(content: Text('Saldo insuficiente. Por favor, recargue.')),
       );
       return;
     }
@@ -121,7 +125,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Reservation successful!')),
+      SnackBar(content: Text('¡Reserva exitosa!')),
     );
 
     Navigator.pop(context);

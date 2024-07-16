@@ -10,13 +10,13 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: Text('Configuración'),
       ),
       body: ListView(
         children: <Widget>[
           ListTile(
             leading: Icon(Icons.edit),
-            title: Text('Edit Profile'),
+            title: Text('Editar Perfil'),
             onTap: () {
               Navigator.push(
                 context,
@@ -26,7 +26,7 @@ class SettingsScreen extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.account_balance_wallet),
-            title: Text('Add Balance'),
+            title: Text('Añadir Saldo'),
             onTap: () {
               Navigator.push(
                 context,
@@ -36,7 +36,7 @@ class SettingsScreen extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.report_problem),
-            title: Text('Create Incidence'),
+            title: Text('Crear Incidencia'),
             onTap: () {
               Navigator.push(
                 context,
@@ -46,7 +46,7 @@ class SettingsScreen extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.list),
-            title: Text('View Incidences'),
+            title: Text('Ver Incidencias'),
             onTap: () {
               Navigator.push(
                 context,
@@ -56,7 +56,7 @@ class SettingsScreen extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.logout),
-            title: Text('Log Out'),
+            title: Text('Cerrar Sesión'),
             onTap: () async {
               await FirebaseAuth.instance.signOut();
               Navigator.pushNamedAndRemoveUntil(

@@ -14,17 +14,17 @@ class MyPostsScreen extends StatelessWidget {
     if (user == null) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('My Posts'),
+          title: Text('Mis Publicaciones'),
         ),
         body: Center(
-          child: Text('No user is logged in.'),
+          child: Text('No hay usuario conectado.'),
         ),
       );
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Posts'),
+        title: Text('Mis Publicaciones'),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore

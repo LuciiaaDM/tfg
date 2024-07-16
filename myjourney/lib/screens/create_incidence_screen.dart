@@ -20,7 +20,7 @@ class _CreateIncidenceScreenState extends State<CreateIncidenceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Incidence'),
+        title: Text('Crear Incidencia'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -30,7 +30,7 @@ class _CreateIncidenceScreenState extends State<CreateIncidenceScreen> {
             children: <Widget>[
               DropdownButtonFormField<String>(
                 value: _selectedCategory,
-                items: <String>['App', 'User'].map((String value) {
+                items: <String>['App', 'Usuario'].map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
@@ -42,31 +42,31 @@ class _CreateIncidenceScreenState extends State<CreateIncidenceScreen> {
                   });
                 },
                 decoration: InputDecoration(
-                  labelText: 'Select Category',
+                  labelText: 'Seleccionar Categoría',
                 ),
               ),
-              if (_selectedCategory == 'User') ...[
+              if (_selectedCategory == 'Usuario') ...[
                 TextFormField(
-                  decoration: InputDecoration(hintText: 'User ID'),
+                  decoration: InputDecoration(hintText: 'ID de Usuario'),
                   onChanged: (value) {
                     userId = value;
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a user ID';
+                      return 'Por favor, ingrese el ID del usuario';
                     }
                     return null;
                   },
                 ),
               ],
               TextFormField(
-                decoration: InputDecoration(hintText: 'Description'),
+                decoration: InputDecoration(hintText: 'Descripción'),
                 onChanged: (value) {
                   description = value;
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a description';
+                    return 'Por favor, ingrese una descripción';
                   }
                   return null;
                 },
@@ -80,7 +80,7 @@ class _CreateIncidenceScreenState extends State<CreateIncidenceScreen> {
                       final user = _auth.currentUser;
                       if (user == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('No user is logged in')),
+                          SnackBar(content: Text('Ningún usuario ha iniciado sesión')),
                         );
                         return;
                       }
@@ -92,19 +92,19 @@ class _CreateIncidenceScreenState extends State<CreateIncidenceScreen> {
                         'category': _selectedCategory,
                         'description': description,
                         'reportedBy': user.email, // Usa el email del usuario como nombre
-                        'userId': _selectedCategory == 'User' ? userId : null,
-                        'status': 'Created',
+                        'userId': _selectedCategory == 'Usuario' ? userId : null,
+                        'status': 'Creada',
                         'timestamp': FieldValue.serverTimestamp(),
                       });
 
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Incidence Created Successfully!')),
+                        SnackBar(content: Text('¡Incidencia creada con éxito!')),
                       );
 
                       Navigator.pop(context); // Regresa a la pantalla de configuración después de crear
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Failed to create incidence: $e')),
+                        SnackBar(content: Text('Error al crear la incidencia: $e')),
                       );
                       print(e);
                     }
@@ -114,7 +114,7 @@ class _CreateIncidenceScreenState extends State<CreateIncidenceScreen> {
                   backgroundColor: Colors.orange, // Cambia el color del botón a naranja
                   foregroundColor: Colors.white, // Cambia el color del texto del botón a blanco
                 ),
-                child: Text('Create Incidence'),
+                child: Text('Crear Incidencia'),
               ),
             ],
           ),
