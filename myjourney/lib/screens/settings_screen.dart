@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'create_incidence_screen.dart';
 import 'incidences_screen.dart';
 import 'profile_edit_screen.dart';
-import 'add_balance_screen.dart'; 
+import 'add_balance_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -11,12 +11,14 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Configuración'),
+        backgroundColor: Colors.orange,
       ),
       body: ListView(
         children: <Widget>[
-          ListTile(
-            leading: Icon(Icons.edit),
-            title: Text('Editar Perfil'),
+          _buildSettingsTile(
+            context: context,
+            icon: Icons.edit,
+            title: 'Editar Perfil',
             onTap: () {
               Navigator.push(
                 context,
@@ -24,9 +26,10 @@ class SettingsScreen extends StatelessWidget {
               );
             },
           ),
-          ListTile(
-            leading: Icon(Icons.account_balance_wallet),
-            title: Text('Añadir Saldo'),
+          _buildSettingsTile(
+            context: context,
+            icon: Icons.account_balance_wallet,
+            title: 'Añadir Saldo',
             onTap: () {
               Navigator.push(
                 context,
@@ -34,9 +37,10 @@ class SettingsScreen extends StatelessWidget {
               );
             },
           ),
-          ListTile(
-            leading: Icon(Icons.report_problem),
-            title: Text('Crear Incidencia'),
+          _buildSettingsTile(
+            context: context,
+            icon: Icons.report_problem,
+            title: 'Crear Incidencia',
             onTap: () {
               Navigator.push(
                 context,
@@ -44,9 +48,10 @@ class SettingsScreen extends StatelessWidget {
               );
             },
           ),
-          ListTile(
-            leading: Icon(Icons.list),
-            title: Text('Ver Incidencias'),
+          _buildSettingsTile(
+            context: context,
+            icon: Icons.list,
+            title: 'Ver Incidencias',
             onTap: () {
               Navigator.push(
                 context,
@@ -54,9 +59,10 @@ class SettingsScreen extends StatelessWidget {
               );
             },
           ),
-          ListTile(
-            leading: Icon(Icons.logout),
-            title: Text('Cerrar Sesión'),
+          _buildSettingsTile(
+            context: context,
+            icon: Icons.logout,
+            title: 'Cerrar Sesión',
             onTap: () async {
               await FirebaseAuth.instance.signOut();
               Navigator.pushNamedAndRemoveUntil(
@@ -67,6 +73,33 @@ class SettingsScreen extends StatelessWidget {
             },
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildSettingsTile({
+    required BuildContext context,
+    required IconData icon,
+    required String title,
+    required Function() onTap,
+  }) {
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      elevation: 5,
+      child: ListTile(
+        leading: Icon(icon, color: Colors.orange),
+        title: Text(
+          title,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        onTap: onTap,
       ),
     );
   }

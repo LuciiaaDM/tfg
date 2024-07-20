@@ -15,6 +15,7 @@ class IncidencesScreen extends StatelessWidget {
       return Scaffold(
         appBar: AppBar(
           title: Text('Incidencias'),
+          backgroundColor: Colors.orange,
         ),
         body: Center(
           child: Text('Por favor, inicie sesión para ver sus incidencias.'),
@@ -25,6 +26,7 @@ class IncidencesScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Incidencias'),
+        backgroundColor: Colors.orange,
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore
@@ -52,32 +54,52 @@ class IncidencesScreen extends StatelessWidget {
             itemCount: incidences.length,
             itemBuilder: (context, index) {
               final incidence = incidences[index];
-              return ListTile(
-                title: Text(incidence.description),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Categoría: ${incidence.category}'),
-                    Text('Reportado por: ${incidence.reportedBy}'),
-                    Text('Estado: ${incidence.status}'),
-                    if (incidence.userId != null) Text('ID de Usuario: ${incidence.userId}'),
-                    Text('Fecha y Hora: ${incidence.timestamp.toDate()}'),
-                  ],
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  color: Colors.grey[100],
+                  child: ListTile(
+                    title: Text(
+                      incidence.description,
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Categoría: ${incidence.category}'),
+                        Text('Reportado por: ${incidence.reportedBy}'),
+                        Text('Estado: ${incidence.status}'),
+                        if (incidence.userId != null)
+                          Text('ID de Usuario: ${incidence.userId}'),
+                        Text('Fecha y Hora: ${incidence.timestamp.toDate()}'),
+                      ],
+                    ),
+                    trailing: currentUser.email == 'admin@admin.com'
+                        ? DropdownButton<String>(
+                            value: incidence.status,
+                            items: <String>['Creado', 'En Proceso', 'Resuelto']
+                                .map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (newValue) {
+                              _firestore
+                                  .collection('incidences')
+                                  .doc(incidence.id)
+                                  .update({'status': newValue});
+                            },
+                          )
+                        : null,
+                  ),
                 ),
-                trailing: currentUser.email == 'admin@admin.com'
-                    ? DropdownButton<String>(
-                        value: incidence.status,
-                        items: <String>['Creado', 'En Proceso', 'Resuelto'].map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (newValue) {
-                          _firestore.collection('incidences').doc(incidence.id).update({'status': newValue});
-                        },
-                      )
-                    : null,
               );
             },
           );

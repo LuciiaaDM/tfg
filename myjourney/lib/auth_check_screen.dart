@@ -14,9 +14,9 @@ class AuthCheckScreen extends StatelessWidget {
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (snapshot.hasData) {
-          return MainScreen(); // Usuario autenticado, muestra la pantalla principal
+          return MainScreen();
         } else {
-          return LoginScreen(); // Usuario no autenticado, muestra la pantalla de inicio de sesión
+          return LoginScreen();
         }
       },
     );

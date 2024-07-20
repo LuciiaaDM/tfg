@@ -13,63 +13,115 @@ class ReservationDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Detalles de la Reserva'),
+        backgroundColor: Colors.orange,
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Actividad: ${reservation.activityTitle}'),
-            Text('Participantes: ${reservation.numberOfParticipants}'),
-            Text('Precio Total: ${reservation.totalPrice.toStringAsFixed(2)}€'),
-            Text('Estado: ${reservation.status}'),
-            Text('Fecha: ${reservation.activityDate.toLocal().toString().split(' ')[0]}'),
-            Text('Hora: ${reservation.activityTime}'),
-            SizedBox(height: 20),
-            if (reservation.status != 'cancelled')
-              ElevatedButton.icon(
-                onPressed: () async {
-                  bool confirm = await _showCancelConfirmationDialog(context);
-                  if (confirm) {
-                    await _cancelReservation(context);
-                  }
-                },
-                icon: Icon(Icons.delete),
-                label: Text('Cancelar Reserva'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                ),
+      body: Center(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            elevation: 5,
+            color: Colors.grey[100],
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildDetailRow('Actividad', reservation.activityTitle),
+                  _buildDetailRow('Participantes', reservation.numberOfParticipants.toString()),
+                  _buildDetailRow('Precio Total', '${reservation.totalPrice.toStringAsFixed(2)}€'),
+                  _buildDetailRow('Estado', reservation.status),
+                  _buildDetailRow('Fecha', reservation.activityDate.toLocal().toString().split(' ')[0]),
+                  _buildDetailRow('Hora', reservation.activityTime),
+                  SizedBox(height: 20),
+                  if (reservation.status != 'Cancelada')
+                    Center(
+                      child: ElevatedButton.icon(
+                        onPressed: () async {
+                          bool confirm = await _showCancelConfirmationDialog(context);
+                          if (confirm) {
+                            await _cancelReservation(context);
+                          }
+                        },
+                        icon: Icon(Icons.delete),
+                        label: Text('Cancelar Reserva'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.white,
+                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
               ),
-          ],
+            ),
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        children: [
+          Text(
+            '$label:',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              color: Colors.black87,
+            ),
+          ),
+          SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              value,
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.black54,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Future<bool> _showCancelConfirmationDialog(BuildContext context) async {
     return await showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Confirmar Cancelación'),
-          content: Text('¿Estás seguro de que deseas cancelar esta reserva? Se te reembolsará el total menos 1.50€ por participante.'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: Text('No'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: Text('Sí'),
-            ),
-          ],
-        );
-      },
-    ) ?? false;
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Confirmar Cancelación'),
+              content: Text(
+                  '¿Estás seguro de que deseas cancelar esta reserva? Se te reembolsará el total menos 1.50€ por participante.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: Text('No'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: Text('Sí'),
+                ),
+              ],
+            );
+          },
+        ) ??
+        false;
   }
 
   Future<void> _cancelReservation(BuildContext context) async {
@@ -94,7 +146,7 @@ class ReservationDetailScreen extends StatelessWidget {
         transaction.update(userRef, {'balance': newBalance});
         transaction.update(
           FirebaseFirestore.instance.collection('reservations').doc(reservation.id),
-          {'status': 'cancelled'},
+          {'status': 'Cancelada'},
         );
         transaction.update(
           FirebaseFirestore.instance.collection('posts').doc(reservation.postId),

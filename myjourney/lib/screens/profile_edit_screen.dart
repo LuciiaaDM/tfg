@@ -40,9 +40,9 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       final data = doc.data();
       if (data != null) {
         setState(() {
-          _residenceController.text = data['residence'] ?? '';
-          _phoneNumberController.text = data['phoneNumber'] ?? '';
-          _additionalInfoController.text = data['additionalInfo'] ?? '';
+          _residenceController.text = data!['residence'] ?? '';
+          _phoneNumberController.text = data!['phoneNumber'] ?? '';
+          _additionalInfoController.text = data!['additionalInfo'] ?? '';
         });
       }
     }
@@ -53,78 +53,123 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Editar Perfil'),
+        backgroundColor: Colors.orange,
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: <Widget>[
-              TextFormField(
-                controller: _residenceController,
-                decoration: InputDecoration(hintText: 'Lugar de Residencia'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, ingrese su lugar de residencia';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _phoneNumberController,
-                decoration: InputDecoration(hintText: 'Número de Teléfono'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, ingrese su número de teléfono';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _additionalInfoController,
-                decoration: InputDecoration(hintText: 'Información Adicional'),
-              ),
-              SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    try {
-                      final user = _auth.currentUser;
-                      if (user == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Ningún usuario ha iniciado sesión')),
-                        );
-                        return;
-                      }
+      body: Center(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            elevation: 5,
+            color: Colors.grey[100],
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: ListView(
+                  shrinkWrap: true,
+                  children: <Widget>[
+                    _buildTextField(
+                      controller: _residenceController,
+                      hintText: 'Lugar de Residencia',
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, ingrese su lugar de residencia';
+                        }
+                        return null;
+                      },
+                    ),
+                    _buildTextField(
+                      controller: _phoneNumberController,
+                      hintText: 'Número de Teléfono',
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, ingrese su número de teléfono';
+                        }
+                        return null;
+                      },
+                    ),
+                    _buildTextField(
+                      controller: _additionalInfoController,
+                      hintText: 'Información Adicional',
+                    ),
+                    SizedBox(height: 20.0),
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          try {
+                            final user = _auth.currentUser;
+                            if (user == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text('Ningún usuario ha iniciado sesión')),
+                              );
+                              return;
+                            }
 
-                      await _firestore.collection('users').doc(user.uid).update({
-                        'residence': _residenceController.text,
-                        'phoneNumber': _phoneNumberController.text,
-                        'additionalInfo': _additionalInfoController.text,
-                      });
+                            await _firestore.collection('users').doc(user.uid).update({
+                              'residence': _residenceController.text,
+                              'phoneNumber': _phoneNumberController.text,
+                              'additionalInfo': _additionalInfoController.text,
+                            });
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('¡Perfil actualizado exitosamente!'))
-                      );
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('¡Perfil actualizado exitosamente!'))
+                            );
 
-                      Navigator.pop(context); 
-                    } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Error al actualizar el perfil: $e'))
-                      );
-                      print(e);
-                    }
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange, 
-                  foregroundColor: Colors.white, 
+                            Navigator.pop(context); 
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Error al actualizar el perfil: $e'))
+                            );
+                            print(e);
+                          }
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange,
+                        foregroundColor: Colors.white,
+                        padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      child: Text('Guardar', style: TextStyle(fontSize: 18)),
+                    ),
+                  ],
                 ),
-                child: Text('Guardar'),
               ),
-            ],
+            ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String hintText,
+    FormFieldValidator<String>? validator,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextFormField(
+        controller: controller,
+        decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: TextStyle(color: Colors.grey),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.orange),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.orange),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+        ),
+        validator: validator,
       ),
     );
   }

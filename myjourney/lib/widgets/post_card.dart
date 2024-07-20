@@ -9,19 +9,25 @@ class PostCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.orange[100], 
+      color: Colors.orange[100],
       margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
       child: Padding(
         padding: EdgeInsets.all(10.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              post.title,
-              style: TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  post.title,
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                _buildRatingStar(post.averageRating),
+              ],
             ),
             SizedBox(height: 5.0),
             Text('Ubicación: ${post.location}'),
@@ -38,14 +44,35 @@ class PostCard extends StatelessWidget {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange, 
-                foregroundColor: Colors.white, 
+                backgroundColor: Colors.orange,
+                foregroundColor: Colors.white,
               ),
               child: Text('Ver Detalles'),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildRatingStar(double averageRating) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Icon(
+          Icons.star,
+          color: Colors.amber,
+          size: 40.0, 
+        ),
+        Text(
+          averageRating.toStringAsFixed(1),
+          style: TextStyle(
+            fontSize: 16.0, 
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+      ],
     );
   }
 

@@ -16,79 +16,147 @@ class _FiltersScreenState extends State<FiltersScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Filters'),
+        backgroundColor: Colors.orange,
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
-        child: ListView(
-          children: <Widget>[
-            DropdownButtonFormField<String>(
-              value: _selectedType,
-              items: <String>['Cualquiera', 'Reseña', 'Actividad'].map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (newValue) {
-                setState(() {
-                  _selectedType = newValue!;
-                });
-              },
-              decoration: InputDecoration(
-                labelText: 'Select Type',
-              ),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          elevation: 5,
+          color: Colors.grey[100],
+          child: Padding(
+            padding: EdgeInsets.all(16.0),
+            child: ListView(
+              children: <Widget>[
+                _buildDropdown(
+                  labelText: 'Select Type',
+                  value: _selectedType,
+                  items: <String>['Cualquiera', 'Reseña', 'Actividad'],
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedType = newValue!;
+                    });
+                  },
+                ),
+                _buildDropdown(
+                  labelText: 'Select Category',
+                  value: _selectedCategory,
+                  items: <String>[
+                    'Cualquiera',
+                    'Restaurante',
+                    'Mirador',
+                    'Museo',
+                    'Sitio Histórico'
+                  ],
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedCategory = newValue!;
+                    });
+                  },
+                ),
+                _buildTextField(
+                  hintText: 'Precio mínimo',
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    _minPrice = double.tryParse(value);
+                  },
+                ),
+                _buildTextField(
+                  hintText: 'Precio máximo',
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    _maxPrice = double.tryParse(value);
+                  },
+                ),
+                SizedBox(height: 20.0),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context, {
+                        'type': _selectedType,
+                        'category': _selectedCategory,
+                        'minPrice': _minPrice,
+                        'maxPrice': _maxPrice,
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      foregroundColor: Colors.white,
+                      padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    child: Text('Apply Filters', style: TextStyle(fontSize: 18)),
+                  ),
+                ),
+              ],
             ),
-            DropdownButtonFormField<String>(
-              value: _selectedCategory,
-              items: <String>[
-                'Cualquiera',
-                'Restaurante',
-                'Mirador',
-                'Museo',
-                'Sitio Histórico'
-              ].map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(_capitalize(value)),
-                );
-              }).toList(),
-              onChanged: (newValue) {
-                setState(() {
-                  _selectedCategory = newValue!;
-                });
-              },
-              decoration: InputDecoration(
-                labelText: 'Select Category',
-              ),
-            ),
-            TextFormField(
-              decoration: InputDecoration(hintText: 'Precio mínimo'),
-              keyboardType: TextInputType.number,
-              onChanged: (value) {
-                _minPrice = double.tryParse(value);
-              },
-            ),
-            TextFormField(
-              decoration: InputDecoration(hintText: 'Precio máximo'),
-              keyboardType: TextInputType.number,
-              onChanged: (value) {
-                _maxPrice = double.tryParse(value);
-              },
-            ),
-            SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context, {
-                  'type': _selectedType,
-                  'category': _selectedCategory,
-                  'minPrice': _minPrice,
-                  'maxPrice': _maxPrice,
-                });
-              },
-              child: Text('Apply Filters'),
-            ),
-          ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildDropdown({
+    required String labelText,
+    required String value,
+    required List<String> items,
+    required ValueChanged<String?> onChanged,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: DropdownButtonFormField<String>(
+        value: value,
+        items: items.map((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+        onChanged: onChanged,
+        decoration: InputDecoration(
+          labelText: labelText,
+          labelStyle: TextStyle(color: Colors.orange),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.orange),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.orange),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required String hintText,
+    required ValueChanged<String> onChanged,
+    TextInputType keyboardType = TextInputType.text,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextFormField(
+        decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: TextStyle(color: Colors.grey),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.orange),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.orange),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+        ),
+        onChanged: onChanged,
+        keyboardType: keyboardType,
       ),
     );
   }

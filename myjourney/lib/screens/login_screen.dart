@@ -20,99 +20,148 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Iniciar Sesión'),
+        backgroundColor: Colors.orange,
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              TextFormField(
-                decoration: InputDecoration(hintText: 'Nombre de Usuario'),
-                onChanged: (value) {
-                  username = value;
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, ingrese su nombre de usuario';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                decoration: InputDecoration(hintText: 'Contraseña'),
-                obscureText: true,
-                onChanged: (value) {
-                  password = value;
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor, ingrese su contraseña';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    try {
-                      // Buscar el usuario en Firestore por nombre de usuario
-                      final userSnapshot = await _firestore
-                          .collection('users')
-                          .where('username', isEqualTo: username)
-                          .get();
-
-                      if (userSnapshot.docs.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Usuario no encontrado')),
-                        );
-                        return;
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.orange, Colors.white],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  TextFormField(
+                    style: TextStyle(color: Colors.black), 
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.grey[300], 
+                      hintText: 'Nombre de Usuario',
+                      hintStyle: TextStyle(color: Colors.black), 
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.orange),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.orange),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    onChanged: (value) {
+                      username = value;
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, ingrese su nombre de usuario';
                       }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 10.0),
+                  TextFormField(
+                    style: TextStyle(color: Colors.black), 
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.grey[300], 
+                      hintText: 'Contraseña',
+                      hintStyle: TextStyle(color: Colors.black), 
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.orange),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.orange),
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    obscureText: true,
+                    onChanged: (value) {
+                      password = value;
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor, ingrese su contraseña';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 20.0),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        try {
+                          final userSnapshot = await _firestore
+                              .collection('users')
+                              .where('username', isEqualTo: username)
+                              .get();
 
-                      final user = userSnapshot.docs.first;
-                      final email = user['email'];
+                          if (userSnapshot.docs.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Usuario no encontrado')),
+                            );
+                            return;
+                          }
 
-                      // Iniciar sesión con correo electrónico y contraseña
-                      await _auth.signInWithEmailAndPassword(
-                        email: email,
-                        password: password,
-                      );
+                          final user = userSnapshot.docs.first;
+                          final email = user['email'];
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('¡Inicio de sesión exitoso!')),
-                      );
+                          await _auth.signInWithEmailAndPassword(
+                            email: email,
+                            password: password,
+                          );
 
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        '/home',
-                        (route) => false,
-                      ); 
-                    } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Error al iniciar sesión: $e')),
-                      );
-                      print(e);
-                    }
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange,  
-                  foregroundColor: Colors.white, 
-                ),
-                child: Text('Iniciar Sesión'),
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('¡Inicio de sesión exitoso!')),
+                          );
+
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            '/home',
+                            (route) => false,
+                          );
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Error al iniciar sesión: $e')),
+                          );
+                          print(e);
+                        }
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      foregroundColor: Colors.white,
+                      padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    child: Text('Iniciar Sesión', style: TextStyle(fontSize: 18)),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/register');
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.white,
+                    ),
+                    child: Text('¿No tienes una cuenta? Regístrate aquí'),
+                  ),
+                ],
               ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/register');
-                },
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.orange,
-                ),
-                child: Text('¿No tienes una cuenta? Regístrate aquí'),
-              ),
-            ],
+            ),
           ),
         ),
       ),

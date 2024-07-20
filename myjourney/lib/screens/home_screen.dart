@@ -74,6 +74,7 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Página Principal'),
+        backgroundColor: Colors.orange,
         actions: [
           IconButton(
             icon: Icon(Icons.filter_list),
@@ -95,11 +96,14 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
             child: TextField(
               decoration: InputDecoration(
                 hintText: 'Buscar por ubicación...',
-                border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide.none,
+                ),
                 filled: true,
                 fillColor: Colors.white,
                 contentPadding: EdgeInsets.all(8.0),
-                suffixIcon: Icon(Icons.search),
+                suffixIcon: Icon(Icons.search, color: Colors.orange),
               ),
               onChanged: _updateSearchQuery,
             ),

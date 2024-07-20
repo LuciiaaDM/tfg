@@ -14,6 +14,7 @@ class ChatsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Chats'),
+        backgroundColor: Colors.orange,
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore
@@ -53,18 +54,30 @@ class ChatsScreen extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     child: Card(
-                      color: Colors.orange[100],
+                      color: Colors.grey[100],
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
                       child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.orange,
+                          child: Text(
+                            recipientName[0].toUpperCase(),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                         title: Text(
                           recipientName,
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
+                            color: Colors.black,
                           ),
                         ),
+                        trailing: Icon(Icons.chat_bubble_outline, color: Colors.orange),
                         onTap: () {
                           Navigator.push(
                             context,

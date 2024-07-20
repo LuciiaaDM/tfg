@@ -14,7 +14,7 @@ class _MainScreenState extends State<MainScreen> {
 
   static List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
-    CreateScreen(), // Asegúrate de importar y agregar CreateScreen aquí
+    CreateScreen(), 
     ChatsScreen(),
     ProfileScreen(),
   ];

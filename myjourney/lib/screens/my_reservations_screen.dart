@@ -57,8 +57,8 @@ class MyReservationsScreen extends StatelessWidget {
                 subtitle: Text(
                   'Participantes: ${reservation.numberOfParticipants}, Precio Total: ${reservation.totalPrice.toStringAsFixed(2)}€',
                 ),
-                tileColor: reservation.status == 'cancelled' ? Colors.red.withOpacity(0.3) : null,
-                trailing: reservation.status == 'cancelled'
+                tileColor: reservation.status == 'Cancelada' ? Colors.red.withOpacity(0.3) : null,
+                trailing: reservation.status == 'Cancelada'
                     ? Icon(Icons.cancel, color: Colors.red)
                     : null,
                 onTap: () {

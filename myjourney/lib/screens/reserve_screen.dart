@@ -23,45 +23,98 @@ class _ReserveScreenState extends State<ReserveScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Reservar Actividad'),
+        backgroundColor: Colors.orange,
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text('Actividad: ${widget.post.title}'),
-            Text('Plazas Disponibles: ${widget.post.availableSeats ?? 0}'),
-            SizedBox(height: 20),
-            Text('Número de Participantes:'),
-            DropdownButton<int>(
-              value: _numberOfParticipants,
-              items: List.generate(widget.post.availableSeats ?? 0, (index) => index + 1)
-                  .map((value) => DropdownMenuItem<int>(
-                        value: value,
-                        child: Text(value.toString()),
-                      ))
-                  .toList(),
-              onChanged: (value) {
-                setState(() {
-                  _numberOfParticipants = value!;
-                });
-              },
+      body: Center(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
             ),
-            SizedBox(height: 20),
-            Text('Precio Total: ${(widget.post.price! * _numberOfParticipants).toStringAsFixed(2)}€'),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                await _makeReservation(context);
-              },
-              child: Text('Reservar'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange, 
-                foregroundColor: Colors.white, 
+            elevation: 5,
+            color: Colors.grey[100],
+            child: Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  _buildDetailRow('Actividad', widget.post.title),
+                  _buildDetailRow('Plazas Disponibles', widget.post.availableSeats?.toString() ?? '0'),
+                  SizedBox(height: 20),
+                  Text(
+                    'Número de Participantes:',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
+                  ),
+                  SizedBox(height: 10),
+                  DropdownButton<int>(
+                    value: _numberOfParticipants,
+                    items: List.generate(widget.post.availableSeats ?? 0, (index) => index + 1)
+                        .map((value) => DropdownMenuItem<int>(
+                              value: value,
+                              child: Text(value.toString()),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _numberOfParticipants = value!;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 20),
+                  _buildDetailRow('Precio Total', '${(widget.post.price! * _numberOfParticipants).toStringAsFixed(2)}€'),
+                  SizedBox(height: 20),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        await _makeReservation(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange,
+                        foregroundColor: Colors.white,
+                        padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      child: Text('Reservar', style: TextStyle(fontSize: 18)),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        children: [
+          Text(
+            '$label:',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              color: Colors.black87,
+            ),
+          ),
+          SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              value,
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.black54,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -97,7 +150,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
       userName: userData?['username'],
       numberOfParticipants: _numberOfParticipants,
       totalPrice: totalPrice,
-      status: 'confirmed',
+      status: 'Confirmada',
       activityDate: widget.post.date!,
       activityTime: widget.post.time!,
       activityTitle: widget.post.title,

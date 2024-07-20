@@ -34,7 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
       if (data != null) {
         setState(() {
           userName = data['username'] ?? 'Usuario';
-          balance = (data['balance'] as num).toDouble(); 
+          balance = (data['balance'] as num).toDouble();
         });
       }
     }
@@ -51,9 +51,10 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     return Scaffold(
       appBar: AppBar(
         title: Text('Perfil'),
+        backgroundColor: Colors.orange,
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.settings),
+            icon: Icon(Icons.settings, color: Colors.white),
             onPressed: () {
               Navigator.push(
                 context,
@@ -67,14 +68,27 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
         children: [
           Container(
             padding: EdgeInsets.all(20.0),
-            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(30.0),
+                bottomRight: Radius.circular(30.0),
+              ),
+            ),
             child: Column(
               children: [
+                CircleAvatar(
+                  radius: 50,
+                  backgroundColor: Colors.orange,
+                  child: Icon(Icons.person, size: 50, color: Colors.white),
+                ),
+                SizedBox(height: 10.0),
                 Text(
                   userName,
                   style: TextStyle(
                     fontSize: 28.0,
                     fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
                 ),
                 SizedBox(height: 10.0),
@@ -90,6 +104,9 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
           ),
           TabBar(
             controller: _tabController,
+            indicatorColor: Colors.orange,
+            labelColor: Colors.orange,
+            unselectedLabelColor: Colors.grey,
             tabs: [
               Tab(icon: Icon(Icons.post_add)),
               Tab(icon: Icon(Icons.book_online)),

@@ -30,6 +30,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.recipientName),
+        backgroundColor: Colors.orange,
       ),
       body: Column(
         children: <Widget>[
@@ -70,7 +71,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           message.text,
                           style: TextStyle(
                             fontSize: 16.0,
-                            color: Colors.black,
+                            color: isMe ? Colors.white : Colors.black,
                           ),
                         ),
                       ),
@@ -89,28 +90,41 @@ class _ChatScreenState extends State<ChatScreen> {
                     controller: _messageController,
                     decoration: InputDecoration(
                       hintText: 'Escribe un mensaje...',
+                      fillColor: Colors.grey[200],
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                        borderSide: BorderSide.none,
+                      ),
                     ),
                   ),
                 ),
-                IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: () async {
-                    if (_messageController.text.isNotEmpty) {
-                      final message = Message(
-                        senderId: currentUser.uid,
-                        text: _messageController.text,
-                        timestamp: Timestamp.now(),
-                      );
+                SizedBox(width: 10.0),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.orange,
+                    shape: BoxShape.circle,
+                  ),
+                  child: IconButton(
+                    icon: Icon(Icons.send, color: Colors.white),
+                    onPressed: () async {
+                      if (_messageController.text.isNotEmpty) {
+                        final message = Message(
+                          senderId: currentUser.uid,
+                          text: _messageController.text,
+                          timestamp: Timestamp.now(),
+                        );
 
-                      await _firestore
-                          .collection('chats')
-                          .doc(widget.chatId)
-                          .collection('messages')
-                          .add(message.toJson());
+                        await _firestore
+                            .collection('chats')
+                            .doc(widget.chatId)
+                            .collection('messages')
+                            .add(message.toJson());
 
-                      _messageController.clear();
-                    }
-                  },
+                        _messageController.clear();
+                      }
+                    },
+                  ),
                 ),
               ],
             ),

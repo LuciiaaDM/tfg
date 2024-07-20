@@ -20,6 +20,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool isPostSaved = false;
+  int? _currentRating;
 
   @override
   void initState() {
@@ -43,120 +44,210 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     }
   }
 
+  void _ratePost(int rating) {
+    setState(() {
+      _currentRating = rating;
+    });
+  }
+
+  Future<void> _saveRating() async {
+    final currentUser = _auth.currentUser;
+    if (currentUser == null || _currentRating == null) return;
+
+    List<int> newRatings = List.from(widget.post.ratings)..add(_currentRating!);
+    double newAverageRating = newRatings.reduce((a, b) => a + b) / newRatings.length;
+
+    await _firestore.collection('posts').doc(widget.post.id).update({
+      'ratings': newRatings,
+      'averageRating': newAverageRating,
+    });
+
+    setState(() {
+      widget.post.ratings = newRatings;
+      widget.post.averageRating = newAverageRating;
+      _currentRating = null;
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('¡Puntuación guardada exitosamente!')),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentUser = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.post.title),
-        actions: currentUser?.uid == widget.post.userId
-            ? [
-                if (widget.post.type == 'Reseña')
-                  IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => EditReviewScreen(post: widget.post),
-                        ),
-                      );
-                    },
-                  ),
-                IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: () async {
-                    await FirebaseFirestore.instance
-                        .collection('posts')
-                        .doc(widget.post.id)
-                        .delete();
-                    Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('¡Post eliminado exitosamente!')),
-                    );
-                  },
-                ),
-              ]
-            : null,
+        title: Text('Detalles del Post'),
+        backgroundColor: Colors.orange,
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'Título: ${widget.post.title}',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Text('Ubicación: ${widget.post.location}'),
-            Text('Categoría: ${widget.post.category}'),
-            Text('Tipo: ${widget.post.type}'),
-            Text('Creado por: ${widget.post.userName}'),
-            if (widget.post.type == 'Actividad') ...[
-              Text('Fecha: ${widget.post.date?.toLocal().toString().split(' ')[0]}'),
-              Text('Hora: ${widget.post.time}'),
-              Text('Precio: ${widget.post.price}€'),
-              Text('Punto de Encuentro: ${widget.post.meetingPoint}'),
-              Text('Capacidad: ${widget.post.capacity}'),
-              Text('Plazas Disponibles: ${widget.post.availableSeats}'), 
-            ],
-            SizedBox(height: 20),
-            Text(widget.post.description),
-            SizedBox(height: 20),
-            if (currentUser?.uid != widget.post.userId) ...[
-              ElevatedButton(
-                onPressed: () async {
-                  final chatId = await _getOrCreateChat(currentUser!.uid, widget.post.userId);
-
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ChatScreen(
-                        chatId: chatId,
-                        recipientName: widget.post.userName,
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          elevation: 5,
+          color: Colors.grey[100],
+          child: Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  widget.post.title,
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.black),
+                ),
+                SizedBox(height: 10),
+                _buildDetailRow(Icons.location_on, 'Ubicación', widget.post.location),
+                _buildDetailRow(Icons.category, 'Categoría', widget.post.category),
+                _buildDetailRow(Icons.info, 'Tipo', widget.post.type),
+                _buildDetailRow(Icons.person, 'Creado por', widget.post.userName),
+                if (widget.post.type == 'Actividad') ...[
+                  _buildDetailRow(Icons.calendar_today, 'Fecha', widget.post.date?.toLocal().toString().split(' ')[0] ?? ''),
+                  _buildDetailRow(Icons.access_time, 'Hora', widget.post.time ?? ''),
+                  _buildDetailRow(Icons.monetization_on, 'Precio', '${widget.post.price}€'),
+                  _buildDetailRow(Icons.place, 'Punto de Encuentro', widget.post.meetingPoint ?? ''),
+                  _buildDetailRow(Icons.group, 'Capacidad', widget.post.capacity?.toString() ?? ''),
+                  _buildDetailRow(Icons.event_seat, 'Plazas Disponibles', widget.post.availableSeats?.toString() ?? ''),
+                ],
+                SizedBox(height: 20),
+                Text(widget.post.description, style: TextStyle(fontSize: 18, color: Colors.black87)),
+                SizedBox(height: 20),
+                if (currentUser?.uid != widget.post.userId) ...[
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        final chatId = await _getOrCreateChat(currentUser!.uid, widget.post.userId);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChatScreen(
+                              chatId: chatId,
+                              recipientName: widget.post.userName,
+                            ),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange,
+                        foregroundColor: Colors.white,
+                      ),
+                      child: Text('Contactar Usuario', style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (isPostSaved) {
+                          await _unsavePost(currentUser!.uid, widget.post.id);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('¡Post eliminado de guardados!')),
+                          );
+                        } else {
+                          await _savePost(currentUser!.uid, widget.post.id);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('¡Post guardado exitosamente!')),
+                          );
+                        }
+                        setState(() {
+                          isPostSaved = !isPostSaved;
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange,
+                        foregroundColor: Colors.white,
+                      ),
+                      child: Text(isPostSaved ? 'Olvidar Post' : 'Guardar Post', style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                  if (widget.post.type == 'Actividad')
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ReserveScreen(post: widget.post),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          foregroundColor: Colors.white,
+                        ),
+                        child: Icon(Icons.shopping_cart, color: Colors.white),
                       ),
                     ),
-                  );
-                },
-                child: Text('Contactar Usuario'),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  if (isPostSaved) {
-                    await _unsavePost(currentUser!.uid, widget.post.id);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('¡Post eliminado de guardados!')),
-                    );
-                  } else {
-                    await _savePost(currentUser!.uid, widget.post.id);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('¡Post guardado exitosamente!')),
-                    );
-                  }
-                  setState(() {
-                    isPostSaved = !isPostSaved;
-                  });
-                },
-                child: Text(isPostSaved ? 'Olvidar Post' : 'Guardar Post'),
-              ),
-              if (widget.post.type == 'Actividad')
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ReserveScreen(post: widget.post),
+                  Center(
+                    child: RatingBar(post: widget.post, onRated: _ratePost, currentRating: _currentRating),
+                  ),
+                  SizedBox(height: 10),
+                  Center(
+                    child: _buildRatingStar(widget.post.averageRating),
+                  ),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: _currentRating != null ? _saveRating : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange,
+                        foregroundColor: Colors.white,
                       ),
-                    );
-                  },
-                  child: Icon(Icons.shopping_cart),
-                ),
-            ],
-          ],
+                      child: Text('Valorar', style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildDetailRow(IconData icon, String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.orange),
+          SizedBox(width: 10),
+          Text(
+            '$label:',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
+          ),
+          SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              value,
+              style: TextStyle(fontSize: 18, color: Colors.grey[800]),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRatingStar(double averageRating) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Icon(
+          Icons.star,
+          color: Colors.orange,
+          size: 40.0,
+        ),
+        Text(
+          averageRating.toStringAsFixed(1),
+          style: TextStyle(
+            fontSize: 16.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+      ],
     );
   }
 
@@ -202,5 +293,31 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
     });
 
     return newChatDoc.id;
+  }
+}
+
+class RatingBar extends StatelessWidget {
+  final Post post;
+  final Function(int) onRated;
+  final int? currentRating;
+
+  RatingBar({required this.post, required this.onRated, this.currentRating});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(5, (index) {
+        return IconButton(
+          icon: Icon(
+            index < (currentRating ?? 0)
+                ? Icons.star
+                : Icons.star_border,
+          ),
+          color: Colors.orange,
+          onPressed: () => onRated(index + 1),
+        );
+      }),
+    );
   }
 }

@@ -4,15 +4,17 @@ class Post {
   String location;
   String description;
   String userId;
-  String userName; 
+  String userName;
   String type;
   DateTime? date;
   double? price;
   String? meetingPoint;
   int? capacity;
-  int? availableSeats; 
+  int? availableSeats;
   String category;
   String? time;
+  List<int> ratings;
+  double averageRating; 
 
   Post.activity({
     required this.id,
@@ -20,7 +22,7 @@ class Post {
     required this.location,
     required this.description,
     required this.userId,
-    required this.userName, 
+    required this.userName,
     required this.date,
     required this.price,
     required this.meetingPoint,
@@ -28,6 +30,8 @@ class Post {
     required this.availableSeats,
     required this.category,
     this.time,
+    this.ratings = const [],
+    this.averageRating = 0.0,
   }) : type = 'Actividad';
 
   Post.review({
@@ -36,8 +40,10 @@ class Post {
     required this.location,
     required this.description,
     required this.userId,
-    required this.userName, 
+    required this.userName,
     required this.category,
+    this.ratings = const [],
+    this.averageRating = 0.0,
   }) : type = 'Reseña';
 
   Map<String, dynamic> toJson() {
@@ -56,11 +62,13 @@ class Post {
       'availableSeats': availableSeats,
       'category': category,
       'time': time,
+      'ratings': ratings,
+      'averageRating': averageRating,
     };
   }
 
   factory Post.fromJson(Map<String, dynamic> json) {
-    return json['type'] == 'activity'
+    return json['type'] == 'Actividad'
         ? Post.activity(
             id: json['id'],
             title: json['title'],
@@ -72,9 +80,11 @@ class Post {
             price: json['price'],
             meetingPoint: json['meetingPoint'],
             capacity: json['capacity'],
-            availableSeats: json['availableSeats'], 
+            availableSeats: json['availableSeats'],
             category: json['category'],
             time: json['time'],
+            ratings: List<int>.from(json['ratings'] ?? []),
+            averageRating: json['averageRating']?.toDouble() ?? 0.0,
           )
         : Post.review(
             id: json['id'],
@@ -84,6 +94,8 @@ class Post {
             userId: json['userId'],
             userName: json['userName'],
             category: json['category'],
+            ratings: List<int>.from(json['ratings'] ?? []),
+            averageRating: json['averageRating']?.toDouble() ?? 0.0,
           );
   }
 }
