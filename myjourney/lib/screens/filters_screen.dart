@@ -6,8 +6,8 @@ class FiltersScreen extends StatefulWidget {
 }
 
 class _FiltersScreenState extends State<FiltersScreen> {
-  String _selectedType = 'Any';
-  String _selectedCategory = 'Any';
+  String _selectedType = 'Cualquiera';
+  String _selectedCategory = 'Cualquiera';
   double? _minPrice;
   double? _maxPrice;
 
@@ -23,7 +23,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
           children: <Widget>[
             DropdownButtonFormField<String>(
               value: _selectedType,
-              items: <String>['Any', 'Review', 'Activity'].map((String value) {
+              items: <String>['Cualquiera', 'Reseña', 'Actividad'].map((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),
@@ -41,11 +41,11 @@ class _FiltersScreenState extends State<FiltersScreen> {
             DropdownButtonFormField<String>(
               value: _selectedCategory,
               items: <String>[
-                'Any',
-                'restaurant',
-                'viewpoint',
-                'museum',
-                'historic_site'
+                'Cualquiera',
+                'Restaurante',
+                'Mirador',
+                'Museo',
+                'Sitio Histórico'
               ].map((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
@@ -62,14 +62,14 @@ class _FiltersScreenState extends State<FiltersScreen> {
               ),
             ),
             TextFormField(
-              decoration: InputDecoration(hintText: 'Min Price'),
+              decoration: InputDecoration(hintText: 'Precio mínimo'),
               keyboardType: TextInputType.number,
               onChanged: (value) {
                 _minPrice = double.tryParse(value);
               },
             ),
             TextFormField(
-              decoration: InputDecoration(hintText: 'Max Price'),
+              decoration: InputDecoration(hintText: 'Precio máximo'),
               keyboardType: TextInputType.number,
               onChanged: (value) {
                 _maxPrice = double.tryParse(value);

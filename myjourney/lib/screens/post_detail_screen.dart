@@ -52,7 +52,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
         title: Text(widget.post.title),
         actions: currentUser?.uid == widget.post.userId
             ? [
-                if (widget.post.type == 'review')
+                if (widget.post.type == 'Reseña')
                   IconButton(
                     icon: Icon(Icons.edit),
                     onPressed: () {
@@ -94,13 +94,13 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
             Text('Categoría: ${widget.post.category}'),
             Text('Tipo: ${widget.post.type}'),
             Text('Creado por: ${widget.post.userName}'),
-            if (widget.post.type == 'activity') ...[
+            if (widget.post.type == 'Actividad') ...[
               Text('Fecha: ${widget.post.date?.toLocal().toString().split(' ')[0]}'),
               Text('Hora: ${widget.post.time}'),
               Text('Precio: ${widget.post.price}€'),
               Text('Punto de Encuentro: ${widget.post.meetingPoint}'),
               Text('Capacidad: ${widget.post.capacity}'),
-              Text('Plazas Disponibles: ${widget.post.availableSeats}'), // Mostrar plazas disponibles
+              Text('Plazas Disponibles: ${widget.post.availableSeats}'), 
             ],
             SizedBox(height: 20),
             Text(widget.post.description),
@@ -141,7 +141,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                 },
                 child: Text(isPostSaved ? 'Olvidar Post' : 'Guardar Post'),
               ),
-              if (widget.post.type == 'activity')
+              if (widget.post.type == 'Actividad')
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(

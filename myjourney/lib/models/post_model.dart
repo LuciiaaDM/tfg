@@ -4,13 +4,13 @@ class Post {
   String location;
   String description;
   String userId;
-  String userName; // Agregado el nombre del usuario
+  String userName; 
   String type;
   DateTime? date;
   double? price;
   String? meetingPoint;
   int? capacity;
-  int? availableSeats; // Nuevo campo para plazas disponibles
+  int? availableSeats; 
   String category;
   String? time;
 
@@ -20,15 +20,15 @@ class Post {
     required this.location,
     required this.description,
     required this.userId,
-    required this.userName, // Inicializa el nombre del usuario
+    required this.userName, 
     required this.date,
     required this.price,
     required this.meetingPoint,
     required this.capacity,
-    required this.availableSeats, // Inicializa plazas disponibles
+    required this.availableSeats,
     required this.category,
     this.time,
-  }) : type = 'activity';
+  }) : type = 'Actividad';
 
   Post.review({
     required this.id,
@@ -36,9 +36,9 @@ class Post {
     required this.location,
     required this.description,
     required this.userId,
-    required this.userName, // Inicializa el nombre del usuario
+    required this.userName, 
     required this.category,
-  }) : type = 'review';
+  }) : type = 'Reseña';
 
   Map<String, dynamic> toJson() {
     return {
@@ -53,7 +53,7 @@ class Post {
       'price': price,
       'meetingPoint': meetingPoint,
       'capacity': capacity,
-      'availableSeats': availableSeats, // Agrega plazas disponibles al JSON
+      'availableSeats': availableSeats,
       'category': category,
       'time': time,
     };
@@ -72,7 +72,7 @@ class Post {
             price: json['price'],
             meetingPoint: json['meetingPoint'],
             capacity: json['capacity'],
-            availableSeats: json['availableSeats'], // Lee plazas disponibles del JSON
+            availableSeats: json['availableSeats'], 
             category: json['category'],
             time: json['time'],
           )

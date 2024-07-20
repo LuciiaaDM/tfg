@@ -45,7 +45,7 @@ class SavedScreen extends StatelessWidget {
           }
 
           final savedPosts = snapshot.data!.docs.map((doc) {
-            return doc['postId'] as String;  // Asegúrate de que sea una lista de strings
+            return doc['postId'] as String;  
           }).toList();
 
           if (savedPosts.isEmpty) {

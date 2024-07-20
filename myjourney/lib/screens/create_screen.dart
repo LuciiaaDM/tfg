@@ -13,15 +13,15 @@ class _CreateScreenState extends State<CreateScreen> {
   final _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  String _selectedType = 'Reseña'; // Por defecto seleccionamos reseña
-  String _selectedCategory = 'Restaurante'; // Por defecto seleccionamos restaurante
+  String _selectedType = 'Reseña'; 
+  String _selectedCategory = 'Restaurante';
 
-  // Campos comunes
+  // comunes
   late String title;
   late String location;
   late String description;
 
-  // Campos adicionales para actividades
+  // campos actividades
   DateTime? date;
   double? price;
   String? meetingPoint;
@@ -120,7 +120,7 @@ class _CreateScreenState extends State<CreateScreen> {
                   }
                   return null;
                 },
-                maxLines: 5, // Aumenta el tamaño del campo de descripción
+                maxLines: 5, 
               ),
               if (_selectedType == 'Actividad') ...[
                 TextFormField(
@@ -213,7 +213,7 @@ class _CreateScreenState extends State<CreateScreen> {
                       }
 
                       final postId = _firestore.collection('posts').doc().id;
-                      final userName = await _getUserName(user.uid); // Obtén el nombre de usuario
+                      final userName = await _getUserName(user.uid); 
 
                       if (_selectedType == 'Actividad') {
                         Post activity = Post.activity(
@@ -222,7 +222,7 @@ class _CreateScreenState extends State<CreateScreen> {
                           location: location,
                           description: description,
                           userId: user.uid,
-                          userName: userName, // Usa el nombre de usuario
+                          userName: userName, 
                           date: date!,
                           price: price!,
                           meetingPoint: meetingPoint!,
@@ -240,7 +240,7 @@ class _CreateScreenState extends State<CreateScreen> {
                           location: location,
                           description: description,
                           userId: user.uid,
-                          userName: userName, // Usa el nombre de usuario
+                          userName: userName,
                           category: _selectedCategory,
                         );
 
@@ -251,7 +251,7 @@ class _CreateScreenState extends State<CreateScreen> {
                         SnackBar(content: Text('¡Creación Exitosa!'))
                       );
 
-                      Navigator.pushReplacementNamed(context, '/home'); // Redirigir a la página de inicio después de crear
+                      Navigator.pushReplacementNamed(context, '/home');
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Error al crear: $e')),
@@ -261,8 +261,8 @@ class _CreateScreenState extends State<CreateScreen> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange, // Cambia el color del botón a naranja
-                  foregroundColor: Colors.white, // Cambia el color del texto del botón a blanco
+                  backgroundColor: Colors.orange, 
+                  foregroundColor: Colors.white, 
                 ),
                 child: Text('Crear'),
               ),

@@ -12,7 +12,7 @@ class _CreateIncidenceScreenState extends State<CreateIncidenceScreen> {
   final _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  String _selectedCategory = 'App'; // Por defecto seleccionamos App
+  String _selectedCategory = 'App'; 
   late String description;
   late String userId;
 
@@ -91,7 +91,7 @@ class _CreateIncidenceScreenState extends State<CreateIncidenceScreen> {
                         'id': incidenceId,
                         'category': _selectedCategory,
                         'description': description,
-                        'reportedBy': user.email, // Usa el email del usuario como nombre
+                        'reportedBy': user.email, 
                         'userId': _selectedCategory == 'Usuario' ? userId : null,
                         'status': 'Creada',
                         'timestamp': FieldValue.serverTimestamp(),
@@ -101,7 +101,7 @@ class _CreateIncidenceScreenState extends State<CreateIncidenceScreen> {
                         SnackBar(content: Text('¡Incidencia creada con éxito!')),
                       );
 
-                      Navigator.pop(context); // Regresa a la pantalla de configuración después de crear
+                      Navigator.pop(context);
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Error al crear la incidencia: $e')),
@@ -111,8 +111,8 @@ class _CreateIncidenceScreenState extends State<CreateIncidenceScreen> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange, // Cambia el color del botón a naranja
-                  foregroundColor: Colors.white, // Cambia el color del texto del botón a blanco
+                  backgroundColor: Colors.orange, 
+                  foregroundColor: Colors.white, 
                 ),
                 child: Text('Crear Incidencia'),
               ),

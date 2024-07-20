@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'create_incidence_screen.dart';
 import 'incidences_screen.dart';
 import 'profile_edit_screen.dart';
-import 'add_balance_screen.dart'; // Importa la pantalla de añadir saldo
+import 'add_balance_screen.dart'; 
 
 class SettingsScreen extends StatelessWidget {
   @override

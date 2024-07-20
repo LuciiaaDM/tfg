@@ -107,7 +107,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         SnackBar(content: Text('¡Perfil actualizado exitosamente!'))
                       );
 
-                      Navigator.pop(context); // Regresar a la pantalla anterior
+                      Navigator.pop(context); 
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Error al actualizar el perfil: $e'))
@@ -117,8 +117,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange, // Cambia el color del botón a naranja
-                  foregroundColor: Colors.white, // Cambia el color del texto del botón a blanco
+                  backgroundColor: Colors.orange, 
+                  foregroundColor: Colors.white, 
                 ),
                 child: Text('Guardar'),
               ),

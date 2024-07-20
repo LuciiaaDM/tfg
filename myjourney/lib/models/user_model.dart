@@ -17,7 +17,7 @@ class UserModel {
     this.balance,
   });
 
-  // Convert a UserModel object into a map
+  
   Map<String, dynamic> toJson() {
     return {
       'uid': uid,
@@ -30,7 +30,6 @@ class UserModel {
     };
   }
 
-  // Create a UserModel object from a map
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       uid: json['uid'],

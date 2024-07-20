@@ -56,8 +56,8 @@ class _ReserveScreenState extends State<ReserveScreen> {
               },
               child: Text('Reservar'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange, // Cambia el color del botón a naranja
-                foregroundColor: Colors.white, // Cambia el color del texto del botón a blanco
+                backgroundColor: Colors.orange, 
+                foregroundColor: Colors.white, 
               ),
             ),
           ],

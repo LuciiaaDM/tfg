@@ -17,7 +17,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   late String confirmPassword;
   late String residence;
   late String phoneNumber;
-  String? additionalInfo; // Hacemos que este campo sea opcional
+  String? additionalInfo; 
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -109,7 +109,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     try {
-                      // Verificar unicidad del nombre de usuario
+                      
                       final usernameSnapshot = await _firestore
                           .collection('users')
                           .where('username', isEqualTo: username)
@@ -134,7 +134,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           email: email,
                           residence: residence,
                           phoneNumber: phoneNumber,
-                          additionalInfo: additionalInfo ?? '', // Guardar cadena vacía si es null
+                          additionalInfo: additionalInfo ?? '', 
                         );
 
                         await _firestore
@@ -150,7 +150,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           context,
                           '/login',
                           (route) => false,
-                        ); // Navega a la página de inicio de sesión y elimina todas las rutas anteriores
+                        ); 
                       }
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -161,8 +161,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange, // Cambia el color del botón a naranja
-                  foregroundColor: Colors.white, // Cambia el color del texto del botón a blanco
+                  backgroundColor: Colors.orange, 
+                  foregroundColor: Colors.white,  
                 ),
                 child: Text('Registrar'),
               ),

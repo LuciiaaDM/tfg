@@ -88,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         context,
                         '/home',
                         (route) => false,
-                      ); // Navega a la página principal y elimina todas las rutas anteriores
+                      ); 
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Error al iniciar sesión: $e')),
@@ -98,8 +98,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange, // Cambia el color del botón a naranja
-                  foregroundColor: Colors.white, // Cambia el color del texto del botón a blanco
+                  backgroundColor: Colors.orange,  
+                  foregroundColor: Colors.white, 
                 ),
                 child: Text('Iniciar Sesión'),
               ),
@@ -108,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   Navigator.pushNamed(context, '/register');
                 },
                 style: TextButton.styleFrom(
-                  foregroundColor: Colors.orange, // Cambia el color del texto del botón a blanco
+                  foregroundColor: Colors.orange,
                 ),
                 child: Text('¿No tienes una cuenta? Regístrate aquí'),
               ),

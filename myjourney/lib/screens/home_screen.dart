@@ -127,7 +127,7 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
             return post.location.toLowerCase().contains(_searchQuery.toLowerCase());
           }).toList();
 
-          // filtros adicionales
+          
           if (_filters['type'] != 'Cualquiera') {
             posts = posts.where((post) => post.type.toLowerCase() == _filters['type'].toLowerCase()).toList();
           }

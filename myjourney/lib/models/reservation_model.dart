@@ -8,7 +8,7 @@ class Reservation {
   String status;
   DateTime activityDate;
   String activityTime;
-  String activityTitle; // Agrega el título de la actividad
+  String activityTitle; 
 
   Reservation({
     required this.id,
@@ -20,7 +20,7 @@ class Reservation {
     required this.status,
     required this.activityDate,
     required this.activityTime,
-    required this.activityTitle, // Inicializa el título de la actividad
+    required this.activityTitle, 
   });
 
   Map<String, dynamic> toJson() {
@@ -34,7 +34,7 @@ class Reservation {
       'status': status,
       'activityDate': activityDate.toIso8601String(),
       'activityTime': activityTime,
-      'activityTitle': activityTitle, // Agrega el título al JSON
+      'activityTitle': activityTitle, 
     };
   }
 
@@ -49,7 +49,7 @@ class Reservation {
       status: json['status'],
       activityDate: DateTime.parse(json['activityDate']),
       activityTime: json['activityTime'],
-      activityTitle: json['activityTitle'], // Lee el título del JSON
+      activityTitle: json['activityTitle'], 
     );
   }
 }

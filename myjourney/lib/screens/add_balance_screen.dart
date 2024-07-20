@@ -105,7 +105,7 @@ class _AddBalanceScreenState extends State<AddBalanceScreen> {
                     if (user != null) {
                       final rand = Random();
                       if (rand.nextInt(100) < 95) {
-                        // Simula una transacción exitosa el 95% de las veces
+                        
                         await _firestore.runTransaction((transaction) async {
                           final userRef = _firestore.collection('users').doc(user.uid);
                           final userDoc = await transaction.get(userRef);

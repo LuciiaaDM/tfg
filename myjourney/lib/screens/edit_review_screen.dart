@@ -93,7 +93,7 @@ class _EditReviewScreenState extends State<EditReviewScreen> {
                         SnackBar(content: Text('¡Reseña actualizada con éxito!'))
                       );
 
-                      Navigator.pop(context); // Regresar a la pantalla anterior después de actualizar
+                      Navigator.pop(context); 
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Error al actualizar la reseña: $e'))

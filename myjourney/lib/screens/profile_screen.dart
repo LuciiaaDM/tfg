@@ -34,7 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
       if (data != null) {
         setState(() {
           userName = data['username'] ?? 'Usuario';
-          balance = (data['balance'] as num).toDouble(); // Asegúrate de convertir el balance a double
+          balance = (data['balance'] as num).toDouble(); 
         });
       }
     }
@@ -77,7 +77,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 10.0), // Espacio entre el nombre y el saldo
+                SizedBox(height: 10.0),
                 Text(
                   'Saldo: ${balance.toStringAsFixed(2)}€',
                   style: TextStyle(
