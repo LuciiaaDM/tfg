@@ -81,6 +81,35 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
       appBar: AppBar(
         title: Text('Detalles del Post'),
         backgroundColor: Colors.orange,
+        actions: currentUser?.uid == widget.post.userId
+            ? [
+                if (widget.post.type == 'Reseña')
+                  IconButton(
+                    icon: Icon(Icons.edit),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditReviewScreen(post: widget.post),
+                        ),
+                      );
+                    },
+                  ),
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () async {
+                    await FirebaseFirestore.instance
+                        .collection('posts')
+                        .doc(widget.post.id)
+                        .delete();
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('¡Post eliminado exitosamente!')),
+                    );
+                  },
+                ),
+              ]
+            : null,
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
